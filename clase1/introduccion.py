@@ -10,8 +10,7 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 
-rend.glColor(1,0,1)
-rend.glClearColor(1,0.5,1)
+
 
 isRunning = True 
 while isRunning:
@@ -25,8 +24,18 @@ while isRunning:
 
     rend.glClear()
     
-    for i in range(100):    
-        rend.glPoint(480 +i ,270+i)
+    punto0 = (width / 2, height /2)
+    
+    for x in range (0, width,10 ):
+        rend.glLine(punto0, (x, height))
+        rend.glLine(punto0, (x, -height))
+        
+    
+    for x in range (0, width, 20):
+        rend.glLine((0,0), (x, height))
+        rend.glLine((0, height -1) ,(x, 0))
+        rend.glLine((width -1,0), (x, height)) 
+        rend.glLine((width -1, height -1) ,(x, 0))
                 
     pygame.display.flip()
     clock.tick(60)
