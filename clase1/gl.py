@@ -1,3 +1,17 @@
+import struct 
+
+def char(c):
+    #1 byte
+    return struct.pack("=c", c.encode("ascii"))
+
+def word(w):
+    #2 bytes
+    return struct.pack("=h", w)
+
+def dword(d):
+    #4 bytes
+    return struct.pack("=l", d)
+
 class Renderer(object):
     def __init__(self, screen):
         self.screen = screen
@@ -86,3 +100,32 @@ class Renderer(object):
                     y -= 1
                 limit += 1
                 
+    def glGFB(self, filename):
+        
+        with open(filename, "wb") as file:
+            #header
+            file.write(char("B"))
+            file.write(char("M"))
+            file.write(dword(14 + 40 + (self.width * self.height * 3)))
+            file.write(dword(0))
+            file.write(dword(14 +40))
+            
+            #info header
+            file.write(dword(40))
+            file.write(dword(self.width))
+            file.write(dword(self.height))
+            file.write(word(1))
+            file.write(word(24))
+            file.write(dword(0))
+            file.write(dword(self.width * self.height *3))
+            file.write(dword(0))
+            file.write(dword(0))
+            file.write(dword(0))
+            file.write(dword(0))
+            
+            #Color table
+            for y in range(self.height):
+                for x in range(self.width):
+                    color = self.frameBuffer[x][y]
+                    color = bytes([color[2], color[1], color[0]])
+                    file.write(color)

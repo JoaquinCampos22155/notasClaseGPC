@@ -10,8 +10,18 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 
+rend.glColor(1,0.2,0.4)
 
 
+poligono1= ((165, 380) ,(185, 360) ,(180, 330), (207, 345),  (233, 330), (230, 360), (250, 380), (220, 385), (205, 410), (193, 383))
+
+
+def drawPoligono(listapuntos):
+     for i in range(len(listapuntos)):
+        rend.glLine(listapuntos[i], listapuntos[(i+1) % len(listapuntos)])
+        
+        
+        
 isRunning = True 
 while isRunning:
     
@@ -24,20 +34,9 @@ while isRunning:
 
     rend.glClear()
     
-    punto0 = (width / 2, height /2)
-    
-    for x in range (0, width,10 ):
-        rend.glLine(punto0, (x, height))
-        rend.glLine(punto0, (x, -height))
-        
-    
-    for x in range (0, width, 20):
-        rend.glLine((0,0), (x, height))
-        rend.glLine((0, height -1) ,(x, 0))
-        rend.glLine((width -1,0), (x, height)) 
-        rend.glLine((width -1, height -1) ,(x, 0))
+    drawPoligono(poligono1)
                 
     pygame.display.flip()
     clock.tick(60)
-    
+rend.glGFB("clase1/ejercicio1output/output.bmp")    
 pygame.quit()    
