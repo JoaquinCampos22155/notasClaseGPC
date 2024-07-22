@@ -20,6 +20,10 @@ class Renderer(object):
         self.glClearColor(0,0,0)
         self.glClear()
     
+        self.vertexShader = None
+        
+        self.models = []
+        
     def glColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -32,16 +36,12 @@ class Renderer(object):
         b = min(1, max(0, b))    
         self.clearColor = [r,g,b]
         
-        
     def glClear(self):
         color = [int(i*255) for i in self.clearColor]
         self.screen.fill(color)
         
         self.frameBuffer = [[self.clearColor for y in range(self.height)]
                             for x in range(self.width)]
-        
-        
-        
         
     def glPoint(self, x, y, color = None):
         #pygame renderiza desde esquina superior iquerida    
@@ -100,9 +100,8 @@ class Renderer(object):
                     y -= 1
                 limit += 1
                 
-    def glGFB(self, filename):
-        
-        with open(filename, "wb") as file:
+    def glGFB(self, filename):       
+        with open(filename, "wb") as file: 
             #header
             file.write(char("B"))
             file.write(char("M"))
@@ -129,3 +128,45 @@ class Renderer(object):
                     color = self.frameBuffer[x][y]
                     color = bytes([color[2], color[1], color[0]])
                     file.write(color)
+                    
+                    
+    def glRender(self):
+        for model in self.models:
+            #por cada modelo en la lista lo voy a dibujar
+            #agarra su matriz modelo
+            mMat = model.GetModelMatrix()
+            
+            #para cada cara del modelo
+            
+            for face in model.faces:
+                #revisar vertices por cara
+                vertCount = len(face)
+                v0 = model.vertices[face[0][0] -1]
+                v1 = model.vertices[face[1][0] -1]
+                v2 = model.vertices[face[2][0] -1]
+                if vertCount == 4:
+                    v3 = model.vertices[face[3][0] - 1]
+                #si hay vertex shader
+                if self.vertexShader:
+                    v0 = self.vertexShader(v0, modelMatrix = mMat)
+                    v1 = self.vertexShader(v1, modelMatrix = mMat)
+                    v2 = self.vertexShader(v2, modelMatrix = mMat)
+                    if vertCount == 4:
+                        v3 = self.vertexShader(v3, modelMatrix = mMat)
+                    
+                    
+                    
+                # self.glPoint(int(v0[0]), int(v0[1]))
+                # self.glPoint(int(v1[0]), int(v1[1]))
+                # self.glPoint(int(v2[0]), int(v2[1]))
+                # if vertCount == 4:
+                #     self.glPoint(int(v3[0]), int(v3[1]))
+                
+                self.glLine((v0[0], v0[1]),(v1[0], v1[1]))
+                self.glLine((v1[0], v1[1]),(v2[0], v2[1]))
+                self.glLine((v2[0], v2[1]),(v0[0], v0[1]))
+                if vertCount == 4:
+                    self.glLine((v0[0], v0[1]),(v2[0], v2[1]))
+                    self.glLine((v2[0], v2[1]),(v3[0], v3[1]))
+                    self.glLine((v3[0], v3[1]),(v0[0], v0[1]))
+                    
