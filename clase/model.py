@@ -23,4 +23,24 @@ class Model(object):
         scaleMat = ScaleMatrix(self.scale[0],
                                          self.scale[1],
                                          self.scale[2])
-        return translateMat * rotateMat * scaleMat
+        
+        resultM = [[0, 0, 0, 0],
+               [0, 0, 0, 0],
+               [0, 0, 0, 0],
+               [0, 0, 0, 0]]
+    
+        intermediateM = [[0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0]]
+        
+        for i in range(4):
+            for j in range(4):
+                for k in range(4):
+                    intermediateM[i][j] += translateMat[i][k] * rotateMat[k][j]
+        
+        for i in range(4):
+            for j in range(4):
+                for k in range(4):
+                    resultM[i][j] += intermediateM[i][k] * scaleMat[k][j]
+        return resultM
