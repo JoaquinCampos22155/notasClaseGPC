@@ -22,9 +22,6 @@ modelo1.scale[0] = 120
 modelo1.scale[1] = 120
 modelo1.scale[2] = 120
 
-
-
-
 rend.models.append(modelo1)
 
 
