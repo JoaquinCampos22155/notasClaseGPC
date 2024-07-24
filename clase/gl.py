@@ -1,5 +1,5 @@
 import struct 
-
+import model as model
 def char(c):
     #1 byte
     return struct.pack("=c", c.encode("ascii"))
@@ -156,11 +156,11 @@ class Renderer(object):
                     
                     
                     
-                # self.glPoint(int(v0[0]), int(v0[1]))
-                # self.glPoint(int(v1[0]), int(v1[1]))
-                # self.glPoint(int(v2[0]), int(v2[1]))
-                # if vertCount == 4:
-                #     self.glPoint(int(v3[0]), int(v3[1]))
+                self.glPoint(int(v0[0]), int(v0[1]))
+                self.glPoint(int(v1[0]), int(v1[1]))
+                self.glPoint(int(v2[0]), int(v2[1]))
+                if vertCount == 4:
+                    self.glPoint(int(v3[0]), int(v3[1]))
                 
                 self.glLine((v0[0], v0[1]),(v1[0], v1[1]))
                 self.glLine((v1[0], v1[1]),(v2[0], v2[1]))

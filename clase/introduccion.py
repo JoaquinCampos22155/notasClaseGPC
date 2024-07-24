@@ -51,8 +51,8 @@ while isRunning:
     rend.glClear()
     rend.glRender()
         
-                
+    rend.glGFB("output.bmp")    
+            
     pygame.display.flip()
     clock.tick(60)
-rend.glGFB("clase1/ejercicio1output/output.bmp")    
 pygame.quit()    
