@@ -24,6 +24,27 @@ class Renderer(object):
         
         self.models = []
         
+<<<<<<< Updated upstream
+=======
+        self.viewportMatrix = [[width/2,0,0,x+ width/2],
+                            [0,height/2,0,y + height/2],
+                            [0,0,0.5,0.5],
+                            [0,0,0,1]]
+        
+    def glProjection(self, n =0.1, f = 1000, fov = 60 ):
+        aspectRatio = self.vpwidth/self.vpheight
+        #rads por tan de math
+        fov *= pi/180
+        t = tan(fov/2) * n
+        r = t * aspectRatio 
+
+        self.projectionMatrix = [[n/r,0,0,0],
+                            [0,n/t,0,0],
+                            [0,0,-(f+n)/(f-n),-(2*f*n)/(f-n)],
+                            [0,0,-1,0]]
+        
+         
+>>>>>>> Stashed changes
     def glColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -160,7 +181,40 @@ class Renderer(object):
                 self.glPoint(int(v1[0]), int(v1[1]))
                 self.glPoint(int(v2[0]), int(v2[1]))
                 if vertCount == 4:
+<<<<<<< Updated upstream
                     self.glPoint(int(v3[0]), int(v3[1]))
+=======
+                    vertexBuffer.append(v0)
+                    vertexBuffer.append(v2)
+                    vertexBuffer.append(v3)
+                    
+            self.glDrawPrimitives(vertexBuffer)
+                    
+            
+    def glTriangle(self, A, B, C , color = None):
+        if  A[1]<B[1]:
+            A, B = B, A
+        if A[1] <C[1]:
+            A,C = C, A
+        if B[1] <C[1]:
+            B,C = C,B
+        self.glLine((A[0], A[1]),(B[0], B[1]))
+        self.glLine((B[0], B[1]),(C[0], C[1]))
+        self.glLine((C[0], C[1]),(A[0], A[1]))
+        
+        if B[1] == C[1]:
+            #parte plana abajo 
+        
+    def glDrawPrimitives(self, buffer):
+        if self.primitiveType == POINTS:
+                for point in buffer:
+                    self.glPoint(int(point[0]), int(point[1]))
+        elif self.primitiveType == LINES:
+            for i in range(0, len(buffer), 3):
+                p0 = buffer[i]
+                p1 = buffer[i+1]
+                p2 = buffer[i+2]
+>>>>>>> Stashed changes
                 
                 self.glLine((v0[0], v0[1]),(v1[0], v1[1]))
                 self.glLine((v1[0], v1[1]),(v2[0], v2[1]))

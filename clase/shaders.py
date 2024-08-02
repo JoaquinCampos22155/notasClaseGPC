@@ -22,6 +22,7 @@ def vertexShader(vertex, **kwargs):
     
     return vt
 
+<<<<<<< Updated upstream
 # Ejemplo de uso
 modelMatrix = [
     [1, 0, 0, 0],
@@ -33,3 +34,16 @@ modelMatrix = [
 vertex = [1, 2, 3]
 
 print(vertexShader(vertex, modelMatrix=modelMatrix))
+=======
+    vt = [vertex[0], vertex[1], vertex[2], 1]
+    
+    vt1 = matrixMult(viewportMatrix, projectionMatrix)
+    vt11 = matrixMult(vt1, viewMatrix)
+    vt111 = matrixMult(vt11, modelMatrix)
+     
+    vt2 = matrix_vector_mult(vt111, vt)
+
+    vt = normalize(vt2)
+
+    return vt
+>>>>>>> Stashed changes
