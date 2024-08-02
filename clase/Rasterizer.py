@@ -3,6 +3,7 @@ from pygame.locals import *
 from gl import *
 from model import Model
 from shaders import vertexShader
+
 # width = 960
 # height = 540
 
@@ -14,6 +15,8 @@ clock = pygame.time.Clock()
 rend = Renderer(screen)
 rend.vertexShader = vertexShader
 rend.glColor(1,0.2,0.4)
+
+
 
 # #guitarra
 # modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/guitarra.obj")
@@ -36,6 +39,12 @@ rend.glColor(1,0.2,0.4)
 # modelo2.scale[1] = 10
 # modelo2.scale[2] = 10
 
+rend.models.append(modelo1)
+#rend.models.append(modelo2)
+
+
+isRunning = True
+modelo1.rotate[1] += 90
 #rend.models.append(modelo1)
 # rend.models.append(modelo2)
 
@@ -98,9 +107,7 @@ while isRunning:
     #rend.glRender()
     rend.glTriangle(triangle1[0], triangle1[1], triangle1[2])
     rend.glTriangle(triangle2[0], triangle2[1], triangle2[2])
-
     rend.glTriangle(triangle3[0], triangle3[1], triangle3[2])
-
 
         
             

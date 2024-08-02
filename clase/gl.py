@@ -1,5 +1,8 @@
 import struct 
 import model as model
+from camera import Camera
+from pygame import *
+from math import tan, pi
 def char(c):
     #1 byte
     return struct.pack("=c", c.encode("ascii"))
@@ -12,22 +15,38 @@ def dword(d):
     #4 bytes
     return struct.pack("=l", d)
 
+POINTS = 0
+LINES = 1
+TRIANGLE = 2
+QUADS = 3
+
 class Renderer(object):
     def __init__(self, screen):
         self.screen = screen
         _, _, self.width, self.height = screen.get_rect()
+        
+        self.camera = Camera()
+        self.glViewport(0, 0 , self.width, self.height)
+        self.glProjection()
+        
         self.glColor(1,1,1)
         self.glClearColor(0,0,0)
         self.glClear()
     
         self.vertexShader = None
         
-        self.models = []
+        self.primitiveType = POINTS
         
-<<<<<<< Updated upstream
-=======
+        self.models = []
+    
+    def glViewport(self, x, y , width, height ):
+        self.vpX = int(x)
+        self.vpY = int(y)
+        self.vpwidth= width
+        self.vpheight = height
+        
         self.viewportMatrix = [[width/2,0,0,x+ width/2],
-                            [0,height/2,0,y + height/2],
+                            [0,height/2,0,Y + height/2],
                             [0,0,0.5,0.5],
                             [0,0,0,1]]
         
@@ -43,8 +62,6 @@ class Renderer(object):
                             [0,0,-(f+n)/(f-n),-(2*f*n)/(f-n)],
                             [0,0,-1,0]]
         
-         
->>>>>>> Stashed changes
     def glColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -157,6 +174,8 @@ class Renderer(object):
             #agarra su matriz modelo
             mMat = model.GetModelMatrix()
             
+            vertexBuffer = [ ]
+            
             #para cada cara del modelo
             
             for face in model.faces:
@@ -169,21 +188,30 @@ class Renderer(object):
                     v3 = model.vertices[face[3][0] - 1]
                 #si hay vertex shader
                 if self.vertexShader:
-                    v0 = self.vertexShader(v0, modelMatrix = mMat)
-                    v1 = self.vertexShader(v1, modelMatrix = mMat)
-                    v2 = self.vertexShader(v2, modelMatrix = mMat)
+                    v0 = self.vertexShader(v0, modelMatrix = mMat ,viewMatrix = self.camera.GetViewMatrix(), projectionMatrix = self.projectionMatrix, viewportMatrix = self.viewportMatrix)
+                    v1 = self.vertexShader(v1, modelMatrix = mMat ,viewMatrix = self.camera.GetViewMatrix(), projectionMatrix = self.projectionMatrix, viewportMatrix = self.viewportMatrix)
+                    v2 = self.vertexShader(v2, modelMatrix = mMat ,viewMatrix = self.camera.GetViewMatrix(), projectionMatrix = self.projectionMatrix, viewportMatrix = self.viewportMatrix)
                     if vertCount == 4:
-                        v3 = self.vertexShader(v3, modelMatrix = mMat)
+                        v3 = self.vertexShader(v3, modelMatrix = mMat, viewMatrix = self.camera.GetViewMatrix(), projectionMatrix = self.projectionMatrix, viewportMatrix = self.viewportMatrix)
+                
+                vertexBuffer.append(v0)
+                vertexBuffer.append(v1)
+                vertexBuffer.append(v2)
+                if vertCount == 4:
+                    vertexBuffer.append(v0)
+                    vertexBuffer.append(v2)
+                    vertexBuffer.append(v3)
                     
+            self.glDrawPrimitives(vertexBuffer)
                     
-                    
+            
+   
                 self.glPoint(int(v0[0]), int(v0[1]))
                 self.glPoint(int(v1[0]), int(v1[1]))
                 self.glPoint(int(v2[0]), int(v2[1]))
                 if vertCount == 4:
-<<<<<<< Updated upstream
                     self.glPoint(int(v3[0]), int(v3[1]))
-=======
+
                     vertexBuffer.append(v0)
                     vertexBuffer.append(v2)
                     vertexBuffer.append(v3)
@@ -214,13 +242,8 @@ class Renderer(object):
                 p0 = buffer[i]
                 p1 = buffer[i+1]
                 p2 = buffer[i+2]
->>>>>>> Stashed changes
                 
-                self.glLine((v0[0], v0[1]),(v1[0], v1[1]))
-                self.glLine((v1[0], v1[1]),(v2[0], v2[1]))
-                self.glLine((v2[0], v2[1]),(v0[0], v0[1]))
-                if vertCount == 4:
-                    self.glLine((v0[0], v0[1]),(v2[0], v2[1]))
-                    self.glLine((v2[0], v2[1]),(v3[0], v3[1]))
-                    self.glLine((v3[0], v3[1]),(v0[0], v0[1]))
+                self.glLine((p0[0], p0[1]),(p1[0], p1[1]))
+                self.glLine((p1[0], p1[1]),(p2[0], p2[1]))
+                self.glLine((p2[0], p2[1]),(p0[0], p0[1]))
                     
