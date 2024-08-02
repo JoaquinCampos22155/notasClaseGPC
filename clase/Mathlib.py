@@ -16,10 +16,6 @@ def matrix_vector_mult(matrix, vector):
         result[i] = sum(matrix[i][j] * vector[j] for j in range(4))
     return result
 
-
-
-
-=======
 #matriz 4x4 mult 
 def matrixMult(matrix1, matrix2):
     result = [[0, 0, 0, 0],
