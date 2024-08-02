@@ -3,6 +3,7 @@ import model as model
 from camera import Camera
 from pygame import *
 from math import tan, pi
+import random
 def char(c):
     #1 byte
     return struct.pack("=c", c.encode("ascii"))
@@ -46,7 +47,7 @@ class Renderer(object):
         self.vpheight = height
         
         self.viewportMatrix = [[width/2,0,0,x+ width/2],
-                            [0,height/2,0,Y + height/2],
+                            [0,height/2,0,y + height/2],
                             [0,0,0.5,0.5],
                             [0,0,0,1]]
         
@@ -203,20 +204,13 @@ class Renderer(object):
                     vertexBuffer.append(v3)
                     
             self.glDrawPrimitives(vertexBuffer)
-                    
-            
-   
-                self.glPoint(int(v0[0]), int(v0[1]))
-                self.glPoint(int(v1[0]), int(v1[1]))
-                self.glPoint(int(v2[0]), int(v2[1]))
-                if vertCount == 4:
-                    self.glPoint(int(v3[0]), int(v3[1]))
+         
+            self.glPoint(int(v0[0]), int(v0[1]))
+            self.glPoint(int(v1[0]), int(v1[1]))
+            self.glPoint(int(v2[0]), int(v2[1]))
+            if vertCount == 4:
+                self.glPoint(int(v3[0]), int(v3[1]))
 
-                    vertexBuffer.append(v0)
-                    vertexBuffer.append(v2)
-                    vertexBuffer.append(v3)
-                    
-            self.glDrawPrimitives(vertexBuffer)
                     
             
     def glTriangle(self, A, B, C , color = None):
@@ -226,12 +220,49 @@ class Renderer(object):
             A,C = C, A
         if B[1] <C[1]:
             B,C = C,B
-        self.glLine((A[0], A[1]),(B[0], B[1]))
-        self.glLine((B[0], B[1]),(C[0], C[1]))
-        self.glLine((C[0], C[1]),(A[0], A[1]))
         
+        def flatBottom(vA, vB, vC):
+            try:
+                mBA = (vB[0] -vA[0])/(vB[1] -vA[1])
+                mCA = (vC[0] -vA[0])/(vC[1] -vA[1])
+            except: 
+                pass
+            else:
+                x0 = vB[0]
+                x1 = vC[0]
+                for y in range (int(vB[1]), int(vA[1])):
+                    self.glLine([x0,y], [x1,y], color)
+                    x0 += mBA
+                    x1 += mCA
+                    
+        def flatTop(vA, vB, vC):
+            try:
+                mCA = (vC[0] -vA[0])/(vC[1] -vA[1])
+                mCB = (vC[0] -vB[0])/(vC[1] -vB[1])
+            except: 
+                pass
+            else:
+                x0 = vA[0]
+                x1 = vB[0]
+                for y in range (int(vA[1]), int(vC[1]), -1):
+                    self.glLine([x0,y], [x1,y], color)
+                    x0 -= mCA
+                    x1 -= mCB                  
+                
+            
         if B[1] == C[1]:
             #parte plana abajo 
+            flatBottom(A, B, C)
+        elif A[1] == B[1]:
+            #parte plana arriba
+            flatTop(A, B, C)
+        else:
+            #divido el triangulo en dos partes 
+            #y dibujo ambos tipos de triangulos
+            #teorema intercepto
+            D = [A[0] + ((B[1] -A[1]) / (C[1] - A[1])) * (C[0] -A [0]), B[1]]
+            flatBottom(A, B, D)
+            flatTop(B, D, C)
         
     def glDrawPrimitives(self, buffer):
         if self.primitiveType == POINTS:
@@ -246,4 +277,12 @@ class Renderer(object):
                 self.glLine((p0[0], p0[1]),(p1[0], p1[1]))
                 self.glLine((p1[0], p1[1]),(p2[0], p2[1]))
                 self.glLine((p2[0], p2[1]),(p0[0], p0[1]))
+        elif self.primitiveType == TRIANGLE:
+            for i in range(0, len(buffer), 3):
+                p0 = buffer[i]
+                p1 = buffer[i+1]
+                p2 = buffer[i+2] 
+                
+                color = [random.random(), random.random(), random.random()]
+                self.glTriangle(p0,p1,p2, color) 
                     
