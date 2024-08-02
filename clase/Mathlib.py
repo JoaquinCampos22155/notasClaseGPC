@@ -1,14 +1,15 @@
 from math import cos, sin, pi
 def normalize(vector):
     return [vector[0] / vector[3], vector[1] / vector[3], vector[2] / vector[3]]
-#punto
+
+#mult elemento por elemento
 def multExE(mat1, mat2):
     if not isinstance(mat2[0], list): 
         mat2 = [mat2 for _ in range(4)]
 
     result = [[mat1[i][j] * mat2[i][j] for j in range(4)] for i in range(4)]
     return result
-#mult de matrices
+#mult matriz vector
 def matrix_vector_mult(matrix, vector):
     result = [0, 0, 0, 0]
     for i in range(4):
@@ -18,6 +19,18 @@ def matrix_vector_mult(matrix, vector):
 
 
 
+=======
+#matriz 4x4 mult 
+def matrixMult(matrix1, matrix2):
+    result = [[0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0]]
+
+    for i in range(4):
+        for j in range(4):
+            result[i][j] = matrix1[i][0] * matrix2[0][j] + matrix1[i][1] * matrix2[1][j] + matrix1[i][2] * matrix2[2][j] + matrix1[i][3] * matrix2[3][j]
+    return result
 
 
 def inverseMatrix(matrix):
@@ -53,6 +66,7 @@ def inverseMatrix(matrix):
     return identity
 
 #Render de clase 2 matrices de pos, tamaño y rotacion 
+
 def TranslationMatrix(x, y, z):
     matrixT = [[1, 0, 0, x],
                [0, 1, 0, y],

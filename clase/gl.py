@@ -62,7 +62,6 @@ class Renderer(object):
                             [0,0,-(f+n)/(f-n),-(2*f*n)/(f-n)],
                             [0,0,-1,0]]
         
-         
     def glColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -206,7 +205,34 @@ class Renderer(object):
             self.glDrawPrimitives(vertexBuffer)
                     
             
-    
+   
+                self.glPoint(int(v0[0]), int(v0[1]))
+                self.glPoint(int(v1[0]), int(v1[1]))
+                self.glPoint(int(v2[0]), int(v2[1]))
+                if vertCount == 4:
+                    self.glPoint(int(v3[0]), int(v3[1]))
+
+                    vertexBuffer.append(v0)
+                    vertexBuffer.append(v2)
+                    vertexBuffer.append(v3)
+                    
+            self.glDrawPrimitives(vertexBuffer)
+                    
+            
+    def glTriangle(self, A, B, C , color = None):
+        if  A[1]<B[1]:
+            A, B = B, A
+        if A[1] <C[1]:
+            A,C = C, A
+        if B[1] <C[1]:
+            B,C = C,B
+        self.glLine((A[0], A[1]),(B[0], B[1]))
+        self.glLine((B[0], B[1]),(C[0], C[1]))
+        self.glLine((C[0], C[1]),(A[0], A[1]))
+        
+        if B[1] == C[1]:
+            #parte plana abajo 
+        
     def glDrawPrimitives(self, buffer):
         if self.primitiveType == POINTS:
                 for point in buffer:

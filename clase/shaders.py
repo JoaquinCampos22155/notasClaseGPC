@@ -5,11 +5,16 @@ def vertexShader(vertex, **kwargs):
     projectionMatrix= kwargs["projectionMatrix"]
     viewportMatrix = kwargs["viewportMatrix"]
 
-    #vt = [vertex[0], vertex[1], vertex[2], 1.0]
-    vt1 = matrix_vector_mult(viewportMatrix, projectionMatrix)
-    vt11 = matrix_vector_mult(vt1, viewMatrix)
-    vt111 = matrix_vector_mult(vt11, modelMatrix)
 
-    vt_normalized = normalize(vt111)
+    vt = [vertex[0], vertex[1], vertex[2], 1]
+    
+    vt1 = matrixMult(viewportMatrix, projectionMatrix)
+    vt11 = matrixMult(vt1, viewMatrix)
+    vt111 = matrixMult(vt11, modelMatrix)
+     
+    vt2 = matrix_vector_mult(vt111, vt)
 
-    return vt_normalized
+    vt = normalize(vt2)
+
+    return vt
+
