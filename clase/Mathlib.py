@@ -1,7 +1,7 @@
 from math import cos, sin, pi
-
 def normalize(vector):
     return [vector[0] / vector[3], vector[1] / vector[3], vector[2] / vector[3]]
+
 #mult elemento por elemento
 def multExE(mat1, mat2):
     if not isinstance(mat2[0], list): 
@@ -15,6 +15,7 @@ def matrix_vector_mult(matrix, vector):
     for i in range(4):
         result[i] = sum(matrix[i][j] * vector[j] for j in range(4))
     return result
+
 #matriz 4x4 mult 
 def matrixMult(matrix1, matrix2):
     result = [[0, 0, 0, 0],
@@ -67,7 +68,6 @@ def TranslationMatrix(x, y, z):
                [0, 0, 1, z],
                [0, 0, 0, 1]]
     return matrixT
-
 
 def ScaleMatrix(x, y, z):
     matrixS = [[x, 0, 0, 0],

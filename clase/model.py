@@ -23,16 +23,16 @@ class Model(object):
         scaleMat = ScaleMatrix(self.scale[0],
                                          self.scale[1],
                                          self.scale[2])
-        
+        intermediateM = [[0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0],
+                        [0, 0, 0, 0]]
         resultM = [[0, 0, 0, 0],
                [0, 0, 0, 0],
                [0, 0, 0, 0],
                [0, 0, 0, 0]]
     
-        intermediateM = [[0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0],
-                        [0, 0, 0, 0]]
+        
         
         for i in range(4):
             for j in range(4):

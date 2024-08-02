@@ -1,12 +1,11 @@
-
 from Mathlib import *
 def vertexShader(vertex, **kwargs):
     modelMatrix = kwargs["modelMatrix"]
     viewMatrix = kwargs["viewMatrix"]
-    projectionMatrix = kwargs["projectionMatrix"]
+    projectionMatrix= kwargs["projectionMatrix"]
     viewportMatrix = kwargs["viewportMatrix"]
 
-    
+
     vt = [vertex[0], vertex[1], vertex[2], 1]
     
     vt1 = matrixMult(viewportMatrix, projectionMatrix)
