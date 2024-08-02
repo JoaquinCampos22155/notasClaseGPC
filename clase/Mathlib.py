@@ -1,7 +1,5 @@
 from math import cos, sin, pi
-<<<<<<< Updated upstream
 
-=======
 def normalize(vector):
     return [vector[0] / vector[3], vector[1] / vector[3], vector[2] / vector[3]]
 #mult elemento por elemento
@@ -63,7 +61,6 @@ def inverseMatrix(matrix):
     return identity
 
 #Render de clase 2 matrices de pos, tamaño y rotacion 
->>>>>>> Stashed changes
 def TranslationMatrix(x, y, z):
     matrixT = [[1, 0, 0, x],
                [0, 1, 0, y],

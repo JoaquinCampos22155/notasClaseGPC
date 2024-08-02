@@ -24,8 +24,7 @@ class Renderer(object):
         
         self.models = []
         
-<<<<<<< Updated upstream
-=======
+
         self.viewportMatrix = [[width/2,0,0,x+ width/2],
                             [0,height/2,0,y + height/2],
                             [0,0,0.5,0.5],
@@ -44,7 +43,7 @@ class Renderer(object):
                             [0,0,-1,0]]
         
          
->>>>>>> Stashed changes
+
     def glColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -181,9 +180,7 @@ class Renderer(object):
                 self.glPoint(int(v1[0]), int(v1[1]))
                 self.glPoint(int(v2[0]), int(v2[1]))
                 if vertCount == 4:
-<<<<<<< Updated upstream
                     self.glPoint(int(v3[0]), int(v3[1]))
-=======
                     vertexBuffer.append(v0)
                     vertexBuffer.append(v2)
                     vertexBuffer.append(v3)
@@ -214,7 +211,6 @@ class Renderer(object):
                 p0 = buffer[i]
                 p1 = buffer[i+1]
                 p2 = buffer[i+2]
->>>>>>> Stashed changes
                 
                 self.glLine((v0[0], v0[1]),(v1[0], v1[1]))
                 self.glLine((v1[0], v1[1]),(v2[0], v2[1]))
