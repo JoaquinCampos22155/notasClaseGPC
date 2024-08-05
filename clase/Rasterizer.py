@@ -4,8 +4,8 @@ from gl import *
 from model import Model
 from shaders import vertexShader
 
-width = 960
-height = 540
+width = 512
+height = 512 
 
 # dimensiones con z
 # width = 200
@@ -15,22 +15,25 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 rend.vertexShader = vertexShader
-rend.glColor(0.2,0.7,0.4)
 
+#POSICION COlOR
+puntoA = [50, 50, 0,   1,0,0]
+puntoB = [256, 500, 0,  0,1,0]
+puntoC = [500, 50, 0,   0,0,1]
 
 isRunning = True
 
 #guitarra
-modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/guitarra.obj")
+# modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/guitarra.obj")
 
-modelo1.translate[2] = -500
-modelo1.rotate[0] = 90
-modelo1.rotate[2] = -90
+# modelo1.translate[2] = -500
+# modelo1.rotate[0] = 90
+# modelo1.rotate[2] = -90
 
 
-modelo1.scale[0] = 100
-modelo1.scale[1] = 100
-modelo1.scale[2] = 100
+# modelo1.scale[0] = 100
+# modelo1.scale[1] = 100
+# modelo1.scale[2] = 100
 
 # #Cara
 
@@ -41,14 +44,12 @@ modelo1.scale[2] = 100
 # modelo2.scale[1] = 10
 # modelo2.scale[2] = 10
 
-rend.models.append(modelo1)
+#rend.models.append(modelo1)
 #rend.models.append(modelo2)
 
 
-triangle1 = [[10,80],[50,160],[70,80]]
-triangle2 = [[180,50],[150,1],[70,180]]
-triangle3 = [[180,120],[120,160],[150,160]]
 
+rend.primitiveType = TRIANGLE
 
 while isRunning:
 
@@ -107,9 +108,10 @@ while isRunning:
             elif event.key == pygame.K_m:
                 rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/dutchangle.bmp")   
 
-
     rend.glClear()
-    rend.glRender()
+    rend.glTriangle(puntoA, puntoB, puntoC)
+
+    # rend.glRender()
     # rend.glTriangle(triangle1[0], triangle1[1], triangle1[2])
     # rend.glTriangle(triangle2[0], triangle2[1], triangle2[2])
     # rend.glTriangle(triangle3[0], triangle3[1], triangle3[2])

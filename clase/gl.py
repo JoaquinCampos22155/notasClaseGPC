@@ -3,6 +3,7 @@ import model as model
 from camera import Camera
 from pygame import *
 from math import tan, pi
+from Mathlib import barycentricCoords
 import random
 def char(c):
     #1 byte
@@ -213,7 +214,7 @@ class Renderer(object):
 
                     
             
-    def glTriangle(self, A, B, C , color = None):
+    def glTriangle(self, A, B, C):
         if  A[1]<B[1]:
             A, B = B, A
         if A[1] <C[1]:
@@ -230,8 +231,18 @@ class Renderer(object):
             else:
                 x0 = vB[0]
                 x1 = vC[0]
-                for y in range (int(vB[1]), int(vA[1])):
-                    self.glLine([x0,y], [x1,y], color)
+                for y in range (round(vB[1]), round(vA[1]+1)):
+                    #self.glLine([x0,y], [x1,y], color)
+                    for x in range(round(x0), round(x1+1) ):
+                        vP = [x,y]
+                        bCoords = barycentricCoords(vA,vB, vC, vP)
+                        if bCoords != None:
+                            u,v,w = bCoords
+                            r = u*vA[3] +v*vB[3] +w*vC[3]
+                            g = u*vA[4] +v*vB[4] +w*vC[4]
+                            b = u*vA[5] +v*vB[5] +w*vC[5]
+                            color = [r,g,b]
+                        self.glPoint(x,y, color)
                     x0 += mBA
                     x1 += mCA
                     
@@ -244,8 +255,18 @@ class Renderer(object):
             else:
                 x0 = vA[0]
                 x1 = vB[0]
-                for y in range (int(vA[1]), int(vC[1]), -1):
-                    self.glLine([x0,y], [x1,y], color)
+                for y in range (round(vA[1]), round(vC[1]-1), -1):
+                    #self.glLine([x0,y], [x1,y], color)
+                    for x in range(round(x0), round(x1+1) ):
+                        vP = [x,y]
+                        bCoords = barycentricCoords(vA,vB, vC, vP)
+                        if bCoords != None:
+                            u,v,w = bCoords
+                            r = u*vA[3] +v*vB[3] +w*vC[3]
+                            g = u*vA[4] +v*vB[4] +w*vC[4]
+                            b = u*vA[5] +v*vB[5] +w*vC[5]
+                            color = [r,g,b]
+                        self.glPoint(x,y, color)
                     x0 -= mCA
                     x1 -= mCB                  
                 
@@ -282,7 +303,6 @@ class Renderer(object):
                 p0 = buffer[i]
                 p1 = buffer[i+1]
                 p2 = buffer[i+2] 
-                
-                color = [random.random(), random.random(), random.random()]
-                self.glTriangle(p0,p1,p2, color) 
+                #color = [random.random(), random.random(), random.random()]
+                self.glTriangle(p0,p1,p2) 
                     
