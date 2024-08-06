@@ -24,7 +24,7 @@ puntoC = [500, 50, 0,   0,0,1]
 isRunning = True
 
 #guitarra
-# modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/guitarra.obj")
+modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/carro.obj")
 
 # modelo1.translate[2] = -500
 # modelo1.rotate[0] = 90
@@ -44,7 +44,7 @@ isRunning = True
 # modelo2.scale[1] = 10
 # modelo2.scale[2] = 10
 
-#rend.models.append(modelo1)
+rend.models.append(modelo1)
 #rend.models.append(modelo2)
 
 
@@ -109,7 +109,8 @@ while isRunning:
                 rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/dutchangle.bmp")   
 
     rend.glClear()
-    rend.glTriangle(puntoA, puntoB, puntoC)
+    rend.glRender()
+    #rend.glTriangle(puntoA, puntoB, puntoC)
 
     # rend.glRender()
     # rend.glTriangle(triangle1[0], triangle1[1], triangle1[2])
