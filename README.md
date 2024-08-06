@@ -3,7 +3,7 @@ Dentro de este repositorio se puede ver todos los avances que se llevan a cabo e
 
 IMPORTANTE
 ==== 
-## Sobre el correr el codigo, unicamente con correr el rasterizer deberia ser suficiente al ser este un repositorio de las notas de clase, como se nos sugirió en las branches estaré subiendo las imagenes de cada lab respectiva a su rama, no obstante, importante mencionar que el main no siempre va a devolver lo que se pide en el lab ya que este irá al ritmo de la clase.
+## Sobre el correr el codigo, unicamente con correr el rasterizer deberia ser suficiente al ser este un repositorio de las notas de clase, como se nos sugirió en las branches estaré subiendo las imagenes y los resultados generados en cada lab respectiva a su rama, no obstante, importante mencionar que el main no siempre va a devolver lo que se pide en el lab ya que este irá al ritmo de la clase.
 # Sobre clase
 
 Dentro del programa podemos observar que se encuentra una guitarra.obj esta fue creada por mí con la herramienta sketchup de manera que no siempre es perfecta o se le notan los detalles del todo. El cual ya no se considera despues del lab#3 ya que no tenia texturas.
