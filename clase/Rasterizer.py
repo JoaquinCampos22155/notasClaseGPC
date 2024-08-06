@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from gl import *
 from model import Model
-from shaders import vertexShader
+from shaders import vertexShader, fragmentShader
 
 width = 512
 height = 512 
@@ -15,16 +15,10 @@ clock = pygame.time.Clock()
 
 rend = Renderer(screen)
 rend.vertexShader = vertexShader
-
-#POSICION COlOR
-puntoA = [50, 50, 0,   1,0,0]
-puntoB = [256, 500, 0,  0,1,0]
-puntoC = [500, 50, 0,   0,0,1]
-
-isRunning = True
+rend.fragmentShader = fragmentShader
 
 #guitarra
-modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/carro.obj")
+#modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/carro.obj")
 
 # modelo1.translate[2] = -500
 # modelo1.rotate[0] = 90
@@ -35,22 +29,25 @@ modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clas
 # modelo1.scale[1] = 100
 # modelo1.scale[2] = 100
 
-# #Cara
+#Cara
 
 # modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/face.obj")
-# modelo2.translate[2] = 500
+# modelo2.translate[2] = -5
+# modelo2.translate[1] = -1
 
-# modelo2.scale[0] = 10
-# modelo2.scale[1] = 10
-# modelo2.scale[2] = 10
+# modelo2.scale[0] = 0.10
+# modelo2.scale[1] = 0.10
+# modelo2.scale[2] = 0.10
 
-rend.models.append(modelo1)
-#rend.models.append(modelo2)
+#rend.models.append(modelo1)
+# rend.models.append(modelo2)
 
 
+puntoA = [50, 50, 0]
+puntoB = [250, 500, 0]
+puntoC = [500, 50, 0]
 
-rend.primitiveType = TRIANGLE
-
+isRunning = True
 while isRunning:
 
     for event in pygame.event.get():
@@ -109,18 +106,11 @@ while isRunning:
                 rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/dutchangle.bmp")   
 
     rend.glClear()
-    rend.glRender()
-    #rend.glTriangle(puntoA, puntoB, puntoC)
-
-    # rend.glRender()
-    # rend.glTriangle(triangle1[0], triangle1[1], triangle1[2])
-    # rend.glTriangle(triangle2[0], triangle2[1], triangle2[2])
-    # rend.glTriangle(triangle3[0], triangle3[1], triangle3[2])
-
-        
-            
-    pygame.display.flip()
+    rend.glTriangle(puntoA, puntoB, puntoC)
+    #rend.glRender()
+    pygame.display.flip()	   
     clock.tick(60)
+rend.glGenerateFrameBuffer("output.bmp")
 
 pygame.quit()  
   

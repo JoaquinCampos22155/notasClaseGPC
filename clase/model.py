@@ -1,5 +1,6 @@
 from obj import Obj
 from Mathlib import *
+from texture import Texture
 
 class Model(object):
     def __init__ (self, filename):
@@ -7,6 +8,7 @@ class Model(object):
         
         self.vertices = objFile.vertices
         self.faces = objFile.faces
+        
         self.translate = [0,0,0]
         self.rotate = [0,0,0]
         self.scale = [1,1,1]

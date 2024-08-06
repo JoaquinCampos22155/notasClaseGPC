@@ -12,6 +12,7 @@ class Obj(object):
 		for line in lines:
 			# Si la linea no cuenta con un prefijo y un valor,
 			# seguimos a la siguiente la linea
+			line = line.rstrip()
 
 			try:
 				prefix, value = line.split(" ", 1)
@@ -40,5 +41,3 @@ class Obj(object):
 					vert = list(map(int, vert.split("/")))
 					face.append(vert)
 				self.faces.append(face)
-
-				#self.faces.append([list(map(int, vert.split("/"))) for vert in value.split(" ")])

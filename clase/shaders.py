@@ -18,3 +18,13 @@ def vertexShader(vertex, **kwargs):
 
     return vt
 
+def fragmentShader(**kwargs):
+    #por pixel
+    u, v, w = kwargs["bCoords"]
+    cA, cB, cC = kwargs["vertColors"]
+    
+    
+    r = u*cA[0] + v*cB[0] + w*cC[0]
+    g = u*cA[1] + v*cB[1] + w*cC[1]
+    b = u*cA[2] + v*cB[2] + w*cC[2]
+    return [r,g,b]
