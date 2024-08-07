@@ -256,34 +256,46 @@ class Renderer(object):
             flatBottom(A, B, D)
             flatTop(D, B, C)
             
-    def glDrawTrianglePoint(self, vA, vB, vC, vP):
-        bcScreen = barycentricCoords(vA, vB, vC, vP)
+    def glDrawTrianglePoint(self, A, B, C, P):
+        x = P[0]
+        y = P[1]
+        if not (0 <= x< self.width) or not (0 <= y <self.height):
+            return
+        bCoords = barycentricCoords(A, B, C, P)
         
-        if (bcScreen[0] < 0 or bcScreen[0] > 1 or
-            bcScreen[1] < 0 or bcScreen[1] > 1 or
-            bcScreen[2] < 0 or bcScreen[2] > 1):
+        if bCoords == None:
             return
         
-        z = vA[2] * bcScreen[0] + vB[2] * bcScreen[1] + vC[2] * bcScreen[2]
+        u,v,w = bCoords
+        
+        color = self.currColor    
+        if self.fragmentShader != None:
+            verts = (A, B, C)
+            color = self.fragmentShader(verts = verts, 
+                                        bCoords = bCoords,)
+                    
+        self.glPoint(x, y, color)
+            
+    def glDrawPrimitives(self, buffer, vertexOffset):
+        if self.primitiveType == POINTS:
+            for i in range(0, len(buffer), vertexOffset):
+                x = buffer[i]
+                y = buffer[i + 1]
+                self.glPoint(x, y)
+        elif self.primitiveType == LINES:
+            for i in range(0, len(buffer), vertexOffset *3):
+                for j in range (3):
+                    x0 = buffer[i+vertexOffset*j+0]
+                    y0 = buffer[i+vertexOffset*j+1]
 
-        if z < self.zbuffer[vP[0]][vP[1]]:
-            self.zbuffer[vP[0]][vP[1]] = z
-            
-            color = [bcScreen[0], bcScreen[1], bcScreen[2]]
-            if self.fragmentShader:
-                color = self.fragmentShader(barycentricCoords=bcScreen,
-                                            vColor=color)
+                    x1 = buffer[ i + vertexOffset * ((j + 1)%3) + 0]
+                    y1 = buffer[ i + vertexOffset * ((j + 1)%3) + 1]
+                    
+                    self.glLine((x0,y0),(x1,y1))
+        elif self.primitiveType == TRIANGLES:
+            for i in range(0, len(buffer), vertexOffset * 3):    
+                A = [ buffer[i + j + vertexOffset * 0] for j in range(vertexOffset)]
+                B = [ buffer[i + j + vertexOffset * 1] for j in range(vertexOffset)]
+                C = [ buffer[i + j + vertexOffset * 2] for j in range(vertexOffset)]
                 
-            self.glPoint(vP[0], vP[1], color)
-            
-    def glDrawPrimitives(self, vertexBuffer, vertexCount):
-        for i in range(0, len(vertexBuffer), vertexCount * 3):
-            v0 = vertexBuffer[i:i+3]
-            v1 = vertexBuffer[i+3:i+6]
-            v2 = vertexBuffer[i+6:i+9]
-            
-            A = [v0[0], v0[1], v0[2]]
-            B = [v1[0], v1[1], v1[2]]
-            C = [v2[0], v2[1], v2[2]]
-            
-            self.glTriangle(A, B, C)
+                self.glTriangle(A,B,C)
