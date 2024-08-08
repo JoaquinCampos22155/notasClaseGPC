@@ -7,12 +7,16 @@ class Model(object):
         objFile = Obj(filename)
         
         self.vertices = objFile.vertices
+        self.texCoords = objFile.texcoords
         self.faces = objFile.faces
         
         self.translate = [0,0,0]
         self.rotate = [0,0,0]
         self.scale = [1,1,1]
-    
+
+        self.texture = None
+    def LoadTexture(self, filename):
+        self.texture = Texture(filename)
     def GetModelMatrix(self):
         translateMat = TranslationMatrix(self.translate[0],
                                          self.translate[1],

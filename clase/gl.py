@@ -37,6 +37,8 @@ class Renderer(object):
         self.vertexShader = None
         self.fragmentShader = None
 
+        self.activeTexture = None
+        
         self.primitiveType = TRIANGLES
         
         self.models = []
@@ -85,10 +87,14 @@ class Renderer(object):
         
         self.frameBuffer = [[self.clearColor for y in range(self.height)]
                             for x in range(self.width)]
+        
         self.zbuffer = [[float('inf') for y in range(self.height)]
                         for x in range(self.width)]
         
     def glPoint(self, x, y, color=None):
+        
+        x = round(x)
+        y = round(y)
         if (0 <= x < self.width) and (0 <= y < self.height):
             color = [int(i * 255) for i in (color or self.currColor)]
             self.screen.set_at((x, self.height - 1 - y), color)    
@@ -168,6 +174,10 @@ class Renderer(object):
     def glRender(self):
         for model in self.models:
             mMat = model.GetModelMatrix()
+            
+            #guardar referencia de textura delmodelo
+            self.activeTexture = model.texture
+            
             vertexBuffer = []
             
             for face in model.faces:
@@ -175,6 +185,7 @@ class Renderer(object):
                 for i in range(len(face)):
                     vert = []
                     pos = model.vertices[face[i][0] - 1]
+                    
                     
                     if self.vertexShader:
                         pos = self.vertexShader(pos,
@@ -185,6 +196,13 @@ class Renderer(object):
                     
                     for value in pos:
                         vert.append(value)
+                        
+                    #obtenemos coordenadas de textura
+                    vts = model.texCoords[face[i][1] -1]
+                    #agregando valores del vts al contenedor del vertice
+                    for value in vts:
+                        vert.append(value)
+                        
                     faceVerts.append(vert)
                 
                 for value in faceVerts[0]: vertexBuffer.append(value)
@@ -195,7 +213,7 @@ class Renderer(object):
                     for value in faceVerts[2]: vertexBuffer.append(value)
                     for value in faceVerts[3]: vertexBuffer.append(value)
 
-            self.glDrawPrimitives(vertexBuffer, 3)
+            self.glDrawPrimitives(vertexBuffer, 5 )
 
     def glTriangle(self, A, B, C):
         if A[1] < B[1]:
@@ -252,7 +270,12 @@ class Renderer(object):
         elif A[1] == B[1]:
             flatTop(A, B, C)
         else:
-            D = (C[0] + ((B[1] - C[1]) / (A[1] - C[1])) * (A[0] - C[0]), B[1])
+            D = [A[0] + ((B[1] - A[1]) / (C[1] - A[1])) * (C[0] - A[0]), B[1]]
+            
+            u, v, w = barycentricCoords(A, B, C, D)
+            for i in range(2,len(A)):
+                
+                D.append(u * A[i] + v *B[i] + w * C[i])
             flatBottom(A, B, D)
             flatTop(D, B, C)
             
@@ -261,6 +284,8 @@ class Renderer(object):
         y = P[1]
         if not (0 <= x< self.width) or not (0 <= y <self.height):
             return
+        
+        
         bCoords = barycentricCoords(A, B, C, P)
         
         if bCoords == None:
@@ -268,11 +293,23 @@ class Renderer(object):
         
         u,v,w = bCoords
         
+        # Hay que asaegurarse que coordsbari es igual a 1
+        if not isclose(u+v+w, 1.0):
+            return
+        
+        #se calcula valor de z
+        z = u * A[2] + v * B[2] + w * C[2]
+        #si el valor de z es mayor de el valor guardado en zbuffer esta mas lejos 
+        if z >= self.zbuffer[x][y]:
+            return 
+        self.zbuffer[x][y] = z
+        
         color = self.currColor    
         if self.fragmentShader != None:
             verts = (A, B, C)
             color = self.fragmentShader(verts = verts, 
-                                        bCoords = bCoords,)
+                                        bCoords = bCoords,
+                                        texture = self.activeTexture)
                     
         self.glPoint(x, y, color)
             

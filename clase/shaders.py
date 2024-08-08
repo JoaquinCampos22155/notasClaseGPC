@@ -22,13 +22,25 @@ def fragmentShader(**kwargs):
     #por pixel
     A, B, C = kwargs["verts"]
     u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
 
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
     
     r = 1
     g = 1
     b = 1
     
-    r *= u
-    g *= v
-    b *= w
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
     return [r,g,b]

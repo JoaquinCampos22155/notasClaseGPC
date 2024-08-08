@@ -94,7 +94,7 @@ def barycentricCoords(A, B, C, P):
 
 	# Si cada coordenada est� entre 0 a 1 y la suma de las tres
 	# es igual a 1, entonces son v�lidas.
-	if 0<=u<=1 and 0<=v<=1 and 0<=w<=1 and isclose(u+v+w, 1.0):
+	if 0<=u<=1 and 0<=v<=1 and 0<=w<=1:
 		return (u, v, w)
 	else:
 		return None

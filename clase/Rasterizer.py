@@ -18,7 +18,7 @@ rend.vertexShader = vertexShader
 rend.fragmentShader = fragmentShader
 
 #guitarra
-#modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/carro.obj")
+#modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/carro.obj")
 
 # modelo1.translate[2] = -500
 # modelo1.rotate[0] = 90
@@ -29,23 +29,22 @@ rend.fragmentShader = fragmentShader
 # modelo1.scale[1] = 100
 # modelo1.scale[2] = 100
 
+
 #Cara
+modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/botella.obj")
+modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella1.bmp")
+modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella2.bmp")
+modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella3.bmp")
+modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella4.bmp")
 
-# modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/face.obj")
-# modelo2.translate[2] = -5
-# modelo2.translate[1] = -1
 
-# modelo2.scale[0] = 0.10
-# modelo2.scale[1] = 0.10
-# modelo2.scale[2] = 0.10
+modelo2.scale[0] = 2 
+modelo2.scale[1] = 2
+modelo2.scale[2] = 2
 
 #rend.models.append(modelo1)
-# rend.models.append(modelo2)
+rend.models.append(modelo2)
 
-
-puntoA = [50, 50, 0]
-puntoB = [250, 500, 0]
-puntoC = [500, 50, 0]
 
 isRunning = True
 while isRunning:
@@ -87,7 +86,7 @@ while isRunning:
             elif event.key == pygame.K_9:
                 rend.camera.translate[2] += 50
             elif event.key == pygame.K_8:
-                rend.camera.translate[2] += 50
+                rend.camera.translate[2] -= 50
             
             #tipo rend
             elif event.key == pygame.K_1:
@@ -95,7 +94,7 @@ while isRunning:
             elif event.key == pygame.K_2:
                 rend.primitiveType = LINES
             elif event.key == pygame.K_3:
-                rend.primitiveType = TRIANGLE
+                rend.primitiveType = TRIANGLES
             elif event.key == pygame.K_v:
                 rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/midiumshot.bmp")    
             elif event.key == pygame.K_b:
@@ -106,11 +105,10 @@ while isRunning:
                 rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/dutchangle.bmp")   
 
     rend.glClear()
-    rend.glTriangle(puntoA, puntoB, puntoC)
-    #rend.glRender()
+    rend.glRender()
     pygame.display.flip()	   
     clock.tick(60)
-rend.glGenerateFrameBuffer("output.bmp")
+rend.glGFB("prueba1.bmp")
 
 pygame.quit()  
   
