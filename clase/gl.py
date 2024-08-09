@@ -34,12 +34,13 @@ class Renderer(object):
         self.glClearColor(0, 0, 0)
         self.glClear()
     
-        self.vertexShader = None
-        self.fragmentShader = None
+        self.activeVertexShader = None
+        self.activeFragmentShader = None
 
+        self.directionalLight = [1,0,0]
         self.activeTexture = None
         
-        self.primitiveType = TRIANGLES
+        self.primitiveType = POINTS
         
         self.models = []
     
@@ -173,10 +174,13 @@ class Renderer(object):
                     
     def glRender(self):
         for model in self.models:
+            
             mMat = model.GetModelMatrix()
             
             #guardar referencia de textura delmodelo
             self.activeTexture = model.texture
+            self.activeVertexShader = model.vertexShader
+            self.activeFragmentShader = model.fragmentShader
             
             vertexBuffer = []
             
@@ -187,8 +191,8 @@ class Renderer(object):
                     pos = model.vertices[face[i][0] - 1]
                     
                     
-                    if self.vertexShader:
-                        pos = self.vertexShader(pos,
+                    if self.activeVertexShader:
+                        pos = self.activeVertexShader(pos,
                                                 modelMatrix=mMat,
                                                 viewMatrix=self.camera.GetViewMatrix(),
                                                 projectionMatrix=self.projectionMatrix,
@@ -202,7 +206,12 @@ class Renderer(object):
                     #agregando valores del vts al contenedor del vertice
                     for value in vts:
                         vert.append(value)
-                        
+                    
+                    #obtenemos las noramles de la cara actual
+                    normal= model.normals[face[i][2] -1]
+                    for value in normal:
+                        vert.append(value)
+                            
                     faceVerts.append(vert)
                 
                 for value in faceVerts[0]: vertexBuffer.append(value)
@@ -213,7 +222,7 @@ class Renderer(object):
                     for value in faceVerts[2]: vertexBuffer.append(value)
                     for value in faceVerts[3]: vertexBuffer.append(value)
 
-            self.glDrawPrimitives(vertexBuffer, 5 )
+            self.glDrawPrimitives(vertexBuffer, 8)
 
     def glTriangle(self, A, B, C):
         if A[1] < B[1]:
@@ -278,6 +287,19 @@ class Renderer(object):
                 D.append(u * A[i] + v *B[i] + w * C[i])
             flatBottom(A, B, D)
             flatTop(D, B, C)
+    
+    #funcion para dibujar triangulos sin hoyos   
+    def glTriangle_bc(self, A, B, C):
+        minX = round(min(A[0], B[0], C[0]))
+        minY = round(min(A[1], B[1], C[1]))
+        maxX = round(max(A[0], B[0], C[0]))
+        maxY = round(max(A[1], B[1], C[1]))
+        
+        for x in range(minX, maxX +1):
+            for y in range(minY, maxY +1):
+                P = [x,y]
+                if barycentricCoords(A, B, C, P) != None:
+                    self.glDrawTrianglePoint(A, B, C, P)
             
     def glDrawTrianglePoint(self, A, B, C, P):
         x = P[0]
@@ -305,11 +327,12 @@ class Renderer(object):
         self.zbuffer[x][y] = z
         
         color = self.currColor    
-        if self.fragmentShader != None:
+        if self.activeFragmentShader != None:
             verts = (A, B, C)
-            color = self.fragmentShader(verts = verts, 
+            color = self.activeFragmentShader(verts = verts, 
                                         bCoords = bCoords,
-                                        texture = self.activeTexture)
+                                        texture = self.activeTexture,
+                                        dirLight = self.directionalLight)
                     
         self.glPoint(x, y, color)
             

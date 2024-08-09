@@ -23,10 +23,18 @@ def fragmentShader(**kwargs):
     A, B, C = kwargs["verts"]
     u, v, w = kwargs["bCoords"]
     texture = kwargs["texture"]
+    dirLight = kwargs["dirLight"]
 
     vtA = [A[3], A[4]]
     vtB = [B[3], B[4]]
     vtC = [C[3], C[4]]
+    
+    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
+    #guardamos 
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
     
     r = 1
     g = 1

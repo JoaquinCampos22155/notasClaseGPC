@@ -9,12 +9,17 @@ class Model(object):
         self.vertices = objFile.vertices
         self.texCoords = objFile.texcoords
         self.faces = objFile.faces
+        self.normals = objFile.normals
         
         self.translate = [0,0,0]
         self.rotate = [0,0,0]
         self.scale = [1,1,1]
 
         self.texture = None
+        
+        self.vertexShader = None
+        self.fragmentShader = None
+        
     def LoadTexture(self, filename):
         self.texture = Texture(filename)
     def GetModelMatrix(self):
