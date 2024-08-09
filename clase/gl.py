@@ -40,7 +40,7 @@ class Renderer(object):
         self.directionalLight = [1,0,0]
         self.activeTexture = None
         
-        self.primitiveType = POINTS
+        self.primitiveType = TRIANGLES
         
         self.models = []
     

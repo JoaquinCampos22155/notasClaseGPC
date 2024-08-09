@@ -1,11 +1,33 @@
 from math import cos, sin, pi, isclose
+import math
 #operaciones de matrices
+def normalize_vector(v):
+    magnitude = math.sqrt(sum(x**2 for x in v))
+    return [x / magnitude for x in v]
+    
 def normalize(vector):
     return [vector[0] / vector[3], vector[1] / vector[3], vector[2] / vector[3]]
-def prodpunt(vec1, vec2):
-    x1 = vec1[1][0][0] * vec2[1][0][0]
-    y2 = vec1[1][0][0] * vec2[1][0][0]
-    pass
+def dotProd(vec1, vec2):
+    # Asegúrate de que ambas listas tengan al menos 3 elementos
+    if len(vec1) < 3:
+        vec1 = vec1 + [0] * (3 - len(vec1))  # Rellena con ceros si es necesario
+    if len(vec2) < 3:
+        vec2 = vec2 + [0] * (3 - len(vec2))  # Rellena con ceros si es necesario
+    
+    # Calcula el producto punto
+    x = vec1[0] * vec2[0]
+    y = vec1[1] * vec2[1]
+    z = vec1[2] * vec2[2]
+    
+    res = x + y + z
+    return res
+def crossProd(mat1, mat2):
+    return [
+        mat1[1] * mat2[2] - mat1[2] * mat2[1],  # Componente i (positivo)
+        -(mat1[0] * mat2[2] - mat1[2] * mat2[0]),  # Componente j (negativo)
+        mat1[0] * mat2[1] - mat1[1] * mat2[0]   # Componente k (positivo)
+    ]
+
 #mult elemento por elemento
 def multExE(mat1, mat2):
     if not isinstance(mat2[0], list): 
@@ -109,6 +131,12 @@ def TranslationMatrix(x, y, z):
                [0, 0, 1, z],
                [0, 0, 0, 1]]
     return matrixT
+
+def toArray(vect):
+    array = [] 
+    for i in range(len(vect)):
+        array.append(vect[i])
+    return array
 
 def ScaleMatrix(x, y, z):
     matrixS = [[x, 0, 0, 0],

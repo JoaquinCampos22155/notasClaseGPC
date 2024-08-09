@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((width,height), pygame.SCALED)
 clock = pygame.time.Clock()
 
 rend = Renderer(screen)
- 
+
 
 # #EJERCICIO
 # modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/face.obj")
@@ -26,18 +26,42 @@ rend = Renderer(screen)
 
 
 #Cara
+modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
+modelo1.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
+modelo1.vertexShader = vertexShader
+modelo1.fragmentShader = unlitShader
+
+modelo1.translate[2] = -3
+modelo1.translate[0] = -2  
+modelo1.scale[0] = 2
+modelo1.scale[1] = 2
+modelo1.scale[2] = 2
+
 modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
 modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
 modelo2.vertexShader = vertexShader
-modelo2.fragmentShader = fragmentShader
+modelo2.fragmentShader = toonShader
   
-modelo2.translate[2] = -3  
+modelo2.translate[2] = -3
+modelo2.translate[0] = 0  
 modelo2.scale[0] = 2
 modelo2.scale[1] = 2
 modelo2.scale[2] = 2
 
-#rend.models.append(modelo1)
+modelo3 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
+modelo3.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
+modelo3.vertexShader = vertexShader
+modelo3.fragmentShader = gouradShader
+  
+modelo3.translate[2] = -3
+modelo3.translate[0] = 2  
+modelo3.scale[0] = 2
+modelo3.scale[1] = 2
+modelo3.scale[2] = 2
+
+rend.models.append(modelo1)
 rend.models.append(modelo2)
+rend.models.append(modelo3)
 
 
 isRunning = True
