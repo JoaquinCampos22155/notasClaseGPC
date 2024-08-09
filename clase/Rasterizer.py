@@ -2,11 +2,11 @@ import pygame
 from pygame.locals import *
 from gl import *
 from model import Model
-from shaders import vertexShader, fragmentShader
+from shaders import *
 
-width = 512
-height = 512 
-
+width = 940
+height = 450 
+backgroundc = (169, 169, 169)
 # dimensiones con z
 # width = 200
 # height = 200
@@ -14,31 +14,25 @@ screen = pygame.display.set_mode((width,height), pygame.SCALED)
 clock = pygame.time.Clock()
 
 rend = Renderer(screen)
-rend.vertexShader = vertexShader
-rend.fragmentShader = fragmentShader
+ 
 
-#guitarra
-#modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/carro.obj")
-
-# modelo1.translate[2] = -500
-# modelo1.rotate[0] = 90
-# modelo1.rotate[2] = -90
+# #EJERCICIO
+# modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/face.obj")
 
 
-# modelo1.scale[0] = 100
-# modelo1.scale[1] = 100
-# modelo1.scale[2] = 100
+# modelo1.scale[0] = 2 
+# modelo1.scale[1] = 2
+# modelo1.scale[2] = 2
 
 
 #Cara
-modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/botella.obj")
-modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella1.bmp")
-modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella2.bmp")
-modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella3.bmp")
-modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/botella4.bmp")
-
-
-modelo2.scale[0] = 2 
+modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
+modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
+modelo2.vertexShader = vertexShader
+modelo2.fragmentShader = fragmentShader
+  
+modelo2.translate[2] = -3  
+modelo2.scale[0] = 2
 modelo2.scale[1] = 2
 modelo2.scale[2] = 2
 
@@ -58,15 +52,15 @@ while isRunning:
             
             #perspectiva camara "X"
             elif event.key == pygame.K_RIGHT:
-                rend.camera.translate[0] += 50
+                rend.camera.translate[0] += 5
             elif event.key == pygame.K_LEFT:
-                rend.camera.translate[0] -= 50
+                rend.camera.translate[0] -= 5
             
             #perspectiva camara "Y"
             elif event.key == pygame.K_UP:
-                rend.camera.translate[1] += 50
+                rend.camera.translate[1] += 1
             elif event.key == pygame.K_DOWN:
-                rend.camera.translate[1] -= 50
+                rend.camera.translate[1] -= 1
             
             #rotacion camara 
             elif event.key == pygame.K_s:
@@ -84,9 +78,9 @@ while isRunning:
             
             #perspectiva camara "Z"
             elif event.key == pygame.K_9:
-                rend.camera.translate[2] += 50
+                rend.camera.translate[2] += 5
             elif event.key == pygame.K_8:
-                rend.camera.translate[2] -= 50
+                rend.camera.translate[2] -= 5
             
             #tipo rend
             elif event.key == pygame.K_1:
@@ -94,17 +88,10 @@ while isRunning:
             elif event.key == pygame.K_2:
                 rend.primitiveType = LINES
             elif event.key == pygame.K_3:
-                rend.primitiveType = TRIANGLES
-            elif event.key == pygame.K_v:
-                rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/midiumshot.bmp")    
-            elif event.key == pygame.K_b:
-                rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/lowangle.bmp")   
-            elif event.key == pygame.K_n:
-                rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/highangle.bmp")   
-            elif event.key == pygame.K_m:
-                rend.glGFB("clase/ImagenesLab3/ImagenesLab3_Lineas/dutchangle.bmp")   
-
+                rend.primitiveType = TRIANGLES  
+    screen.fill(backgroundc)
     rend.glClear()
+
     rend.glRender()
     pygame.display.flip()	   
     clock.tick(60)

@@ -2,7 +2,10 @@ from math import cos, sin, pi, isclose
 #operaciones de matrices
 def normalize(vector):
     return [vector[0] / vector[3], vector[1] / vector[3], vector[2] / vector[3]]
-
+def prodpunt(vec1, vec2):
+    x1 = vec1[1][0][0] * vec2[1][0][0]
+    y2 = vec1[1][0][0] * vec2[1][0][0]
+    pass
 #mult elemento por elemento
 def multExE(mat1, mat2):
     if not isinstance(mat2[0], list): 
@@ -21,7 +24,7 @@ def matrix_vector_mult(matrix, vector):
 def matrixMult(matrix1, matrix2):
     result = [[0, 0, 0, 0],
                  [0, 0, 0, 0],
-                 [0, 0, 0, 0],
+                 [0, 0, 0, 0], 
                  [0, 0, 0, 0]]
 
     for i in range(4):
