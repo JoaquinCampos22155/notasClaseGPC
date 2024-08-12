@@ -36,6 +36,8 @@ class Renderer(object):
     
         self.activeVertexShader = None
         self.activeFragmentShader = None
+        self.activeModelMatrix = None
+        
 
         self.directionalLight = [1,0,0]
         self.activeTexture = None
@@ -175,9 +177,8 @@ class Renderer(object):
     def glRender(self):
         for model in self.models:
             
-            mMat = model.GetModelMatrix()
-            
-            #guardar referencia de textura delmodelo
+            self.activeModelMatrix = model.GetModelMatrix()
+            #guardar referencia de textura del modelo
             self.activeTexture = model.texture
             self.activeVertexShader = model.vertexShader
             self.activeFragmentShader = model.fragmentShader
@@ -190,10 +191,11 @@ class Renderer(object):
                     vert = []
                     pos = model.vertices[face[i][0] - 1]
                     
+                    untransformedPos = pos
                     
                     if self.activeVertexShader:
                         pos = self.activeVertexShader(pos,
-                                                modelMatrix=mMat,
+                                                modelMatrix=self.activeModelMatrix,
                                                 viewMatrix=self.camera.GetViewMatrix(),
                                                 projectionMatrix=self.projectionMatrix,
                                                 viewportMatrix=self.viewportMatrix)
@@ -206,7 +208,8 @@ class Renderer(object):
                     #agregando valores del vts al contenedor del vertice
                     for value in vts:
                         vert.append(value)
-                    
+                    for value in untransformedPos:
+                        vert.append(value)
                     #obtenemos las noramles de la cara actual
                     normal= model.normals[face[i][2] -1]
                     for value in normal:
@@ -222,7 +225,7 @@ class Renderer(object):
                     for value in faceVerts[2]: vertexBuffer.append(value)
                     for value in faceVerts[3]: vertexBuffer.append(value)
 
-            self.glDrawPrimitives(vertexBuffer, 8)
+            self.glDrawPrimitives(vertexBuffer, 11)
 
     def glTriangle(self, A, B, C):
         if A[1] < B[1]:
@@ -332,7 +335,9 @@ class Renderer(object):
             color = self.activeFragmentShader(verts = verts, 
                                         bCoords = bCoords,
                                         texture = self.activeTexture,
-                                        dirLight = self.directionalLight)
+                                        dirLight = self.directionalLight,
+                                        camPosition = self.camera.translate,
+                                        modelMatrix = self.activeModelMatrix)
                     
         self.glPoint(x, y, color)
             
