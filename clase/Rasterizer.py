@@ -6,7 +6,8 @@ from shaders import *
 
 width = 940
 height = 450 
-background_color = (155, 155, 155)  # Color de fondo en RGB (azul claro)
+#background_color = (155, 155, 155)  # Color de fondo en RGB (gris)
+background_color = (0, 0, 0)  # Color de fondo en RGB (negro)
 
 # dimensiones con z
 # width = 200
@@ -29,17 +30,17 @@ b = 0.75
 
  
 #Cara
-modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
-modelo1.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
-modelo1.vertexShader = vertexShader
-modelo1.fragmentShader = bywshader
+# modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
+# modelo1.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
+# modelo1.vertexShader = vertexShader
+# modelo1.fragmentShader = bywshader
 
-modelo1.translate[2] = -3
-modelo1.translate[0] = -2
-modelo1.translate[1] = -1  
-modelo1.scale[0] = 2
-modelo1.scale[1] = 2
-modelo1.scale[2] = 2
+# modelo1.translate[2] = -3
+# modelo1.translate[0] = -2
+# modelo1.translate[1] = -1  
+# modelo1.scale[0] = 2
+# modelo1.scale[1] = 2
+# modelo1.scale[2] = 2
 
 modelo2 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
 modelo2.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
@@ -53,7 +54,7 @@ modelo2.scale[0] = 2
 modelo2.scale[1] = 2
 modelo2.scale[2] = 2
 
-rend.models.append(modelo1)
+# rend.models.append(modelo1)
 rend.models.append(modelo2)
 
 
@@ -112,7 +113,7 @@ while isRunning:
     rend.glRender()
     pygame.display.flip()	  
     clock.tick(60)
-rend.glGFB("bywshader.bmp")
+rend.glGFB("majoraskshader.bmp")
 
 pygame.quit()  
   
