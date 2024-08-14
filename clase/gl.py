@@ -40,6 +40,7 @@ class Renderer(object):
         
 
         self.directionalLight = [1,0,0]
+        self.directionalLight2 = [0,1,1]
         self.activeTexture = None
         
         self.primitiveType = TRIANGLES
@@ -336,6 +337,7 @@ class Renderer(object):
                                         bCoords = bCoords,
                                         texture = self.activeTexture,
                                         dirLight = self.directionalLight,
+                                        dirLight2 = self.directionalLight2,
                                         camPosition = self.camera.translate,
                                         modelMatrix = self.activeModelMatrix)
                     

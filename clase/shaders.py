@@ -1,6 +1,6 @@
 from Mathlib import *
 import numpy as np
-
+import math
 def vertexShader(vertex, **kwargs):
     modelMatrix = kwargs["modelMatrix"]
     viewMatrix = kwargs["viewMatrix"]
@@ -232,7 +232,8 @@ def majoraskShader(**kwargs):
               u * nA[2] + v * nB[2] + w * nC[2]]
 
     # Normalizar la normal
-    magnitude = np.sqrt(sum(x**2 for x in normal))
+    
+    magnitude = math.sqrt(sum(x**2 for x in normal))
     normal = [x / magnitude for x in normal]
 
     # Posición de textura
@@ -247,32 +248,32 @@ def majoraskShader(**kwargs):
         baseColor = [baseColor[i] * texColor[i] for i in range(3)]
 
     # Convertir dirLight a un array numpy
-    dirLight = np.array(dirLight)
+    dirLight = toArray(dirLight)
     
     # Intensidad de iluminación
-    x = -dirLight
-    intensity = np.dot(normal, x)
+    x = -1*dirLight
+    intensity = dotProd(normal, x)
     intensity = max(0, intensity)
     
     # Variación de color
-    r = baseColor[0] * intensity + 0.2 * np.sin(normal[0] * 10)
-    g = baseColor[1] * intensity + 0.2 * np.sin(normal[1] * 10)
-    b = baseColor[2] * intensity + 0.2 * np.sin(normal[2] * 10)
+    r = baseColor[0] * intensity + 0.2 * math.sin(normal[0] * 10)
+    g = baseColor[1] * intensity + 0.2 * math.sin(normal[1] * 10)
+    b = baseColor[2] * intensity + 0.2 * math.sin(normal[2] * 10)
     
     # Asegurar que los colores estén en el rango [0, 1]
-    r = np.clip(r, 0, 1)
-    g = np.clip(g, 0, 1)
-    b = np.clip(b, 0, 1)
+    r = max(0, min(r, 1))
+    g = max(0, min(g, 1))
+    b = max(0, min(b, 1))
     
     # Aplicar el color final
     return [r, g, b]
-
-def directionalColorShader(**kwargs):
+def bywshader(**kwargs):
     # por píxel
     A, B, C = kwargs["verts"]
     u, v, w = kwargs["bCoords"]
     texture = kwargs["texture"]
     dirLight = kwargs["dirLight"]
+    dirLight2 = kwargs["dirLight2"]  # Nuevo parámetro para la segunda luz
 
     vtA = [A[3], A[4]]
     vtB = [B[3], B[4]]
@@ -288,29 +289,48 @@ def directionalColorShader(**kwargs):
               u * nA[2] + v * nB[2] + w * nC[2]]
 
     # Normalizar la normal
-    magnitude = np.sqrt(sum(x**2 for x in normal))
+    magnitude = math.sqrt(sum(x**2 for x in normal))
     normal = [x / magnitude for x in normal]
-
-    # Determinar el color basado en la dirección de la normal
-    if normal[0] > 0.5:  # Mirando hacia la derecha
-        color = [0, 1, 0]  # Verde
-    elif normal[1] > 0.5:  # Mirando desde arriba
-        color = [1, 0, 0]  # Rojo
-    elif normal[2] > 0.5:  # Mirando hacia adelante
-        color = [0, 0, 1]  # Azul
-    else:  # Mirando hacia abajo o en otras direcciones
-        color = [1, 1, 0]  # Amarillo
 
     # Posición de textura
     vtP = [u * vtA[0] + v * vtB[0] + w * vtC[0],
            u * vtA[1] + v * vtB[1] + w * vtC[1]]
 
-    # Si hay textura, modificar el color
-    if texture:
-        texColor = texture.getColor(vtP[0], vtP[1])
-        color = [color[i] * texColor[i] for i in range(3)]
+    # Cálculo de la posición horizontal en coordenadas de textura
+    x_coord = vtP[0] % 1.0  # Coordenada horizontal en el rango [0, 1]
 
-    # Asegurar que los colores estén en el rango [0, 1]
-    color = np.clip(color, 0, 1)
+    # Crear un patrón de rayas verticales con más blanco
+    stripe_width = 0.1  # Ancho de las rayas
+    if (x_coord // stripe_width) % 2 == 0:
+        baseColor = [1.0, 1.0, 1.0]  # Blanco
+    else:
+        baseColor = [0.9, 0.9, 0.9]  # Gris muy claro para rayas negras
+
+    # Convertir dirLight y dirLight2 a arrays numpy
+    dirLight = toArray(dirLight)
+    dirLight2 = toArray(dirLight2)
     
-    return color
+    # Intensidad de iluminación para dirLight
+    x1 = [-d for d in dirLight]  # Invertir la dirección de la luz 1
+    intensity1 = dotProd(normal, x1)
+    
+    # Intensidad de iluminación para dirLight2
+    x2 = [-d for d in dirLight2]  # Invertir la dirección de la luz 2
+    intensity2 = dotProd(normal, x2)
+
+    # Combinar las intensidades de ambas luces
+    intensity = max(0, intensity1) + max(0, intensity2)
+    intensity = min(intensity, 1)  # Limitar la intensidad a un máximo de 1
+
+    # Aplicar intensidad al color base
+    r = baseColor[0] * intensity
+    g = baseColor[1] * intensity
+    b = baseColor[2] * intensity
+    
+    # Asegurar que los colores estén en el rango [0, 1]
+    r = max(0, min(r, 1))
+    g = max(0, min(g, 1))
+    b = max(0, min(b, 1))
+    
+    # Aplicar el color final
+    return [r, g, b]
