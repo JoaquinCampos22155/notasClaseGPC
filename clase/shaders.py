@@ -54,6 +54,80 @@ def unlitShader(**kwargs):
         b *= texColor[2]
     return [r,g,b]
 
+def glowShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
+    dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
+    camPos = kwargs["camPosition"]
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
+    #guardamos 
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
+    normal = [u * nA[0] + v*nB[0] + w*nC[0],
+              u * nA[1] + v*nB[1] + w*nC[1],
+              u * nA[2] + v*nB[2] + w*nC[2]]
+    
+        
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+       
+    #error? convertir dirLight to array 
+    x = [-1 * elem for elem in toArray(dirLight)]
+    intensity = dotProd(normal, x)
+    intensity = max(0, intensity)
+    r *= intensity
+    g *= intensity
+    b *= intensity
+    
+    #Glow
+    yellowGlow = [1, 1, 0]
+    pixelPos = [u * A[8] + v*B[8] + w*C[8],
+                u * A[9] + v*B[9] + w*C[9],
+                u * A[10] + v*B[10] + w*C[10],
+                1]
+    pixelPos = matrix_vector_mult(modelMatrix,pixelPos)
+    pixelPos = pixelPos.toArray()[0]
+    pixelPos = [pixelPos[0]/pixelPos[3],
+                pixelPos[1]/pixelPos[3],
+                pixelPos[2]/pixelPos[3]]
+    viewDir = [pixelPos[0], camPos[0],
+               pixelPos[1], camPos[1],
+               pixelPos[2], camPos[2]]
+    
+    viewDir = normalize_vector(viewDir)
+    
+    glowIntesity = 1 - dotProd(normal, viewDir)
+    glowIntesity = max(0, glowIntesity)
+    r += min(1, yellowGlow[0] * glowIntesity)
+    g += min(1, yellowGlow[1] * glowIntesity)
+    b += min(1, yellowGlow[2] * glowIntesity)
+    
+    
+    return [r,g,b]
+
 def gouradShader(**kwargs):
     #por pixel
     A, B, C = kwargs["verts"]

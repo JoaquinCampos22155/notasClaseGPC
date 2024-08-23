@@ -57,7 +57,7 @@ b = 0.75
 modelo3 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
 modelo3.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
 modelo3.vertexShader = vertexShader
-modelo3.fragmentShader = edgesgreenShader
+modelo3.fragmentShader = glowShader
 
 modelo3.translate[2] = -3
 modelo3.translate[0] = 0

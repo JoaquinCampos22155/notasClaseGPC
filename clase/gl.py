@@ -209,11 +209,12 @@ class Renderer(object):
                     #agregando valores del vts al contenedor del vertice
                     for value in vts:
                         vert.append(value)
-                    for value in untransformedPos:
-                        vert.append(value)
+                    
                     #obtenemos las noramles de la cara actual
                     normal= model.normals[face[i][2] -1]
                     for value in normal:
+                        vert.append(value)
+                    for value in untransformedPos:
                         vert.append(value)
                             
                     faceVerts.append(vert)
