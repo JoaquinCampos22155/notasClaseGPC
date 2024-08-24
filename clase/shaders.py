@@ -61,7 +61,7 @@ def glowShader(**kwargs):
     texture = kwargs["texture"]
     dirLight = kwargs["dirLight"]
     modelMatrix = kwargs["modelMatrix"]
-    camPos = kwargs["camPosition"]
+    camMatrix = kwargs["camMatrix"]
     vtA = [A[3], A[4]]
     vtB = [B[3], B[4]]
     vtC = [C[3], C[4]]
@@ -104,29 +104,21 @@ def glowShader(**kwargs):
     
     #Glow
     yellowGlow = [1, 1, 0]
-    pixelPos = [u * A[8] + v*B[8] + w*C[8],
-                u * A[9] + v*B[9] + w*C[9],
-                u * A[10] + v*B[10] + w*C[10],
-                1]
-    pixelPos = matrix_vector_mult(modelMatrix,pixelPos)
-    pixelPos = pixelPos.toArray()[0]
-    pixelPos = [pixelPos[0]/pixelPos[3],
-                pixelPos[1]/pixelPos[3],
-                pixelPos[2]/pixelPos[3]]
-    viewDir = [pixelPos[0], camPos[0],
-               pixelPos[1], camPos[1],
-               pixelPos[2], camPos[2]]
     
-    viewDir = normalize_vector(viewDir)
+    camForward = [camMatrix[0][2],  
+              camMatrix[1][2],  
+              camMatrix[2][2]]  
     
-    glowIntesity = 1 - dotProd(normal, viewDir)
-    glowIntesity = max(0, glowIntesity)
-    r += min(1, yellowGlow[0] * glowIntesity)
-    g += min(1, yellowGlow[1] * glowIntesity)
-    b += min(1, yellowGlow[2] * glowIntesity)
+    glowIntesity = 1- dotProd(normal, camForward)
+    glowIntesity = min(1, max(0, glowIntesity))
+    r += yellowGlow[0] * glowIntesity
+    g += yellowGlow[1] * glowIntesity
+    b += yellowGlow[2] * glowIntesity
     
     
-    return [r,g,b]
+    return [min(1, r),
+            min(1, g),
+            min(1, b)]
 
 def gouradShader(**kwargs):
     #por pixel

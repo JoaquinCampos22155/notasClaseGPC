@@ -54,8 +54,8 @@ b = 0.75
 # modelo2.scale[1] = 2
 # modelo2.scale[2] = 2
 
-modelo3 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/table.obj")
-modelo3.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/madera1.bmp")
+modelo3 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/face.obj")
+modelo3.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/model.bmp")
 modelo3.vertexShader = vertexShader
 modelo3.fragmentShader = glowShader
 

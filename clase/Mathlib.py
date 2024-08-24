@@ -144,6 +144,11 @@ def ScaleMatrix(x, y, z):
                [0, 0, z, 0],
                [0, 0, 0, 1]]
     return matrixS
+def toList(array):
+    if isinstance(array, (list, tuple)):  
+        return [toList(item) for item in array]
+    else: 
+        return array
 
 def RotationMatrix(pitch, yaw, roll):
     pitch *= pi / 180

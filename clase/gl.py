@@ -78,7 +78,7 @@ class Renderer(object):
         g = min(1, max(0, g))
         b = min(1, max(0, b))
         self.currColor = [r, g, b]
-        
+    
     def glClearColor(self, r, g, b):
         r = min(1, max(0, r))
         g = min(1, max(0, g))
@@ -192,8 +192,6 @@ class Renderer(object):
                     vert = []
                     pos = model.vertices[face[i][0] - 1]
                     
-                    untransformedPos = pos
-                    
                     if self.activeVertexShader:
                         pos = self.activeVertexShader(pos,
                                                 modelMatrix=self.activeModelMatrix,
@@ -214,8 +212,6 @@ class Renderer(object):
                     normal= model.normals[face[i][2] -1]
                     for value in normal:
                         vert.append(value)
-                    for value in untransformedPos:
-                        vert.append(value)
                             
                     faceVerts.append(vert)
                 
@@ -227,7 +223,7 @@ class Renderer(object):
                     for value in faceVerts[2]: vertexBuffer.append(value)
                     for value in faceVerts[3]: vertexBuffer.append(value)
 
-            self.glDrawPrimitives(vertexBuffer, 11)
+            self.glDrawPrimitives(vertexBuffer, 8)
 
     def glTriangle(self, A, B, C):
         if A[1] < B[1]:
@@ -340,6 +336,7 @@ class Renderer(object):
                                         dirLight = self.directionalLight,
                                         dirLight2 = self.directionalLight2,
                                         camPosition = self.camera.translate,
+                                        camMatrix = self.camera.GetViewMatrix(),
                                         modelMatrix = self.activeModelMatrix)
                     
         self.glPoint(x, y, color)
@@ -367,3 +364,5 @@ class Renderer(object):
                 C = [ buffer[i + j + vertexOffset * 2] for j in range(vertexOffset)]
                 
                 self.glTriangle(A,B,C)
+                
+                
