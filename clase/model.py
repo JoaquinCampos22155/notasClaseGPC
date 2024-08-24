@@ -15,13 +15,16 @@ class Model(object):
         self.rotate = [0,0,0]
         self.scale = [1,1,1]
 
+        self.textureList = []
+        
         self.texture = None
         
         self.vertexShader = None
         self.fragmentShader = None
-        
     def LoadTexture(self, filename):
-        self.texture = Texture(filename)
+        self.texture = Texture(filename)    
+    def LoadTexture(self, filename):
+        self.textureList.append(Texture(filename))
     def GetModelMatrix(self):
         translateMat = TranslationMatrix(self.translate[0],
                                          self.translate[1],

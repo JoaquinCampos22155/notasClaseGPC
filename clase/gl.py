@@ -2,6 +2,7 @@ import struct
 from camera import Camera
 from math import tan, pi, isclose
 from Mathlib import barycentricCoords
+from texture import Texture
 
 def char(c):
     #1 byte
@@ -37,7 +38,7 @@ class Renderer(object):
         self.activeVertexShader = None
         self.activeFragmentShader = None
         self.activeModelMatrix = None
-        
+
 
         self.directionalLight = [1,0,0]
         self.directionalLight2 = [0,1,1]
@@ -46,7 +47,21 @@ class Renderer(object):
         self.primitiveType = TRIANGLES
         
         self.models = []
-    
+        self.background = None
+        
+        
+    def glLoadBackground(self, filename):
+        self.background = Texture(filename)
+    def glClearBackground(self):
+        if self.background == None:
+            return
+        for x in range(self.vpX, self.vpX+self.vpwidth +1):
+            for y in range(self.vpY, self.vpY+self.vpheight +1):
+                tU = (x-self.vpX)/self.vpwidth
+                tV = (y-self.vpY)/self.vpheight 
+                texColor = self.background.getColor(tU, tV)
+                if texColor:
+                    self.glPoint(x, y, texColor)
     def glViewport(self, x, y, width, height):
         self.vpX = int(x)
         self.vpY = int(y)
@@ -324,6 +339,8 @@ class Renderer(object):
         z = u * A[2] + v * B[2] + w * C[2]
         #si el valor de z es mayor de el valor guardado en zbuffer esta mas lejos 
         if z >= self.zbuffer[x][y]:
+            return
+        if z < -1 or z > 1:
             return 
         self.zbuffer[x][y] = z
         
@@ -338,8 +355,8 @@ class Renderer(object):
                                         camPosition = self.camera.translate,
                                         camMatrix = self.camera.GetViewMatrix(),
                                         modelMatrix = self.activeModelMatrix)
-                    
-        self.glPoint(x, y, color)
+        if color != None:          
+            self.glPoint(x, y, color)
             
     def glDrawPrimitives(self, buffer, vertexOffset):
         if self.primitiveType == POINTS:

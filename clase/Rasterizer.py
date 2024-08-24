@@ -6,8 +6,6 @@ from shaders import *
 
 width = 940
 height = 450 
-#background_color = (155, 155, 155)  # Color de fondo en RGB (gris)
-background_color = (0, 0, 0)  # Color de fondo en RGB (negro)
 
 # dimensiones con z
 # width = 200
@@ -16,7 +14,7 @@ screen = pygame.display.set_mode((width,height), pygame.SCALED)
 clock = pygame.time.Clock()
 
 rend = Renderer(screen)
-
+#rend.glLoadBackground("clase/textures/fondo.bmp")
 
 # #EJERCICIO
 # modelo1 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/face.obj")
@@ -54,10 +52,28 @@ b = 0.75
 # modelo2.scale[1] = 2
 # modelo2.scale[2] = 2
 
-modelo3 = Model("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/objects/face.obj")
-modelo3.LoadTexture("C:/Users/jjcam/Desktop/Semestre_6/GraficasPC/notasClaseGPC/clase/textures/model.bmp")
+#mundo
+# modelo3 = Model("clase/objects/table.obj")
+# modelo3.LoadTexture("clase/textures/madera1.bmp")
+
+
+# modelo3.vertexShader = vertexShader
+# modelo3.fragmentShader = gouradShader
+
+# modelo3.translate[2] = -3
+# modelo3.translate[0] = 0
+# modelo3.translate[1] = -1  
+# modelo3.scale[0] = 0.1
+# modelo3.scale[1] = 0.1
+# modelo3.scale[2] = 0.1
+
+#mesa
+modelo3 = Model("clase/objects/Earth.obj")
+modelo3.LoadTexture("clase/textures/madera1.bmp")
+
+
 modelo3.vertexShader = vertexShader
-modelo3.fragmentShader = glowShader
+modelo3.fragmentShader = waffleShader
 
 modelo3.translate[2] = -3
 modelo3.translate[0] = 0
@@ -121,7 +137,7 @@ while isRunning:
             elif event.key == pygame.K_3:
                 rend.primitiveType = TRIANGLES  
     rend.glClear()
-    screen.fill(background_color)
+    rend.glClearBackground()
     rend.glRender()
     pygame.display.flip()	  
     clock.tick(60)

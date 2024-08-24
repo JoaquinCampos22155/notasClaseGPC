@@ -58,7 +58,7 @@ def glowShader(**kwargs):
     #por pixel
     A, B, C = kwargs["verts"]
     u, v, w = kwargs["bCoords"]
-    texture = kwargs["texture"]
+    textureList = kwargs["textureList"]
     dirLight = kwargs["dirLight"]
     modelMatrix = kwargs["modelMatrix"]
     camMatrix = kwargs["camMatrix"]
@@ -87,8 +87,8 @@ def glowShader(**kwargs):
             u * vtA[1] + v *vtB[1] + w * vtC[1]]
     
 
-    if texture:
-        texColor = texture.getColor(vtP[0], vtP[1])
+    if len(textureList) > 0:
+        texColor = textureList[0].getColor(vtP[0], vtP[1])
         
         r *= texColor[0]
         g *= texColor[1]
@@ -126,6 +126,7 @@ def gouradShader(**kwargs):
     u, v, w = kwargs["bCoords"]
     texture = kwargs["texture"]
     dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
 
     vtA = [A[3], A[4]]
     vtB = [B[3], B[4]]
@@ -139,7 +140,13 @@ def gouradShader(**kwargs):
     
     normal = [u * nA[0] + v*nB[0] + w*nC[0],
               u * nA[1] + v*nB[1] + w*nC[1],
-              u * nA[2] + v*nB[2] + w*nC[2]]
+              u * nA[2] + v*nB[2] + w*nC[2],
+              0]
+    normal = matrix_vector_mult(modelMatrix, normal)
+    normal = [-1 * elem for elem in toArray(normal)]
+    normal = [normal[0], normal[1], normal[2]]
+    normal = normalize_vector(normal)
+
     
         
     
@@ -407,3 +414,71 @@ def edgesgreenShader(**kwargs):
         return [0, 1, 0] 
     else:
         return [0, 0, 0]  
+    
+def lineShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
+
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+        
+    height = u * A[1] + v *B[1] + w * C[1]
+    valuey = sin(height)
+    if valuey < 0.5:
+        return None
+    return [r,g,b]
+
+def waffleShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
+
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+        
+    height = u * A[1] + v *B[1] + w * C[1]
+    width = u * A[0] + v *B[0] + w * C[0]
+    valuey = sin(height)
+    valuex = sin(width)
+    if valuex < 0.5 and valuey <0.5:
+        return None
+    return [r,g,b]
