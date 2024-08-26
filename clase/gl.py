@@ -43,6 +43,7 @@ class Renderer(object):
         self.directionalLight = [1,0,0]
         self.directionalLight2 = [0,1,1]
         self.activeTexture = None
+        self.activeTextureList = None
         
         self.primitiveType = TRIANGLES
         
@@ -196,6 +197,7 @@ class Renderer(object):
             self.activeModelMatrix = model.GetModelMatrix()
             #guardar referencia de textura del modelo
             self.activeTexture = model.texture
+            self.activeTextureList = model.textureList
             self.activeVertexShader = model.vertexShader
             self.activeFragmentShader = model.fragmentShader
             
@@ -350,6 +352,7 @@ class Renderer(object):
             color = self.activeFragmentShader(verts = verts, 
                                         bCoords = bCoords,
                                         texture = self.activeTexture,
+                                        textureList = self.activeTextureList, 
                                         dirLight = self.directionalLight,
                                         dirLight2 = self.directionalLight2,
                                         camPosition = self.camera.translate,

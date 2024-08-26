@@ -23,8 +23,9 @@ class Model(object):
         self.fragmentShader = None
     def LoadTexture(self, filename):
         self.texture = Texture(filename)    
-    def LoadTexture(self, filename):
+    def LoadTextures(self, filename):
         self.textureList.append(Texture(filename))
+        
     def GetModelMatrix(self):
         translateMat = TranslationMatrix(self.translate[0],
                                          self.translate[1],
