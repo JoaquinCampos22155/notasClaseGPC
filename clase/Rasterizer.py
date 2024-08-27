@@ -26,8 +26,8 @@ modelo1 = Model("clase/objects/ast/ast1.obj")
 modelo1.vertexShader = vertexShader
 modelo1.fragmentShader = glowShader
 modelo1.LoadTextures("clase/textures/astro.bmp")
-modelo1.translate[0] = 2
-modelo1.translate[1] = -1 
+modelo1.translate[0] = 1.8
+modelo1.translate[1] = -1.2 
 modelo1.translate[2] = -15
 modelo1.rotate[2] = 50
 modelo1.rotate[1] = 50
@@ -55,8 +55,8 @@ modelo3 = Model("clase/objects/table.obj")
 modelo3.LoadTexture("clase/textures/madera1.bmp")
 modelo3.vertexShader = vertexShader
 modelo3.fragmentShader = waffleShader
-modelo3.translate[0] = 1
-modelo3.translate[1] = 0.8
+modelo3.translate[0] = 0.8
+modelo3.translate[1] = 0.6
 modelo3.translate[2] = -5
 modelo3.rotate[1] = -50
 modelo3.rotate[0] = -25
@@ -68,24 +68,34 @@ modelo3.scale[2] = 0.8
 modelo4 = Model("clase/objects/Moon.obj")
 modelo4.LoadTextures("clase/textures/moon/Bump.bmp")
 modelo4.LoadTextures("clase/textures/moon/Diffuse.bmp")
-
-
 modelo4.vertexShader = vertexShader
 modelo4.fragmentShader = glowShader
-
-
 modelo4.translate[0] = -2
 modelo4.translate[1] = -2
 modelo4.translate[2] = -6
 modelo4.scale[0] = 1
 modelo4.scale[1] = 1
 modelo4.scale[2] = 1
+#Buffalo
+modelo5 = Model("clase/objects/buffalo.obj")
+modelo5.LoadTextures("clase/textures/buffalo/Diffuse.bmp")
+modelo5.vertexShader = vertexShader
+modelo5.fragmentShader = glowShader
+modelo5.translate[0] = 9
+modelo5.translate[1] = 4.5
+modelo5.translate[2] = -25
+modelo5.scale[0] = 1
+modelo5.scale[1] = 1
+modelo5.scale[2] = 1
+modelo5.rotate[0] = 20
+modelo5.rotate[1] = 300
+modelo5.rotate[2] = 126
 
 rend.models.append(modelo1)
 rend.models.append(modelo2)
 rend.models.append(modelo3)
 rend.models.append(modelo4)
-
+rend.models.append(modelo5)
 
 isRunning = True
 while isRunning:
