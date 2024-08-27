@@ -103,7 +103,7 @@ def glowShader(**kwargs):
     b *= intensity
     
     #Glow
-    yellowGlow = [1, 1, 0]
+    yellowGlow = [0.7, 0.4, 0.4]
     
     camForward = [camMatrix[0][2],  
               camMatrix[1][2],  
