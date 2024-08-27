@@ -1,5 +1,6 @@
 from Mathlib import *
 import math
+import random
 def vertexShader(vertex, **kwargs):
     modelMatrix = kwargs["modelMatrix"]
     viewMatrix = kwargs["viewMatrix"]
@@ -54,71 +55,6 @@ def unlitShader(**kwargs):
         b *= texColor[2]
     return [r,g,b]
 
-def glowShader(**kwargs):
-    #por pixel
-    A, B, C = kwargs["verts"]
-    u, v, w = kwargs["bCoords"]
-    textureList = kwargs["textureList"]
-    dirLight = kwargs["dirLight"]
-    modelMatrix = kwargs["modelMatrix"]
-    camMatrix = kwargs["camMatrix"]
-    vtA = [A[3], A[4]]
-    vtB = [B[3], B[4]]
-    vtC = [C[3], C[4]]
-    
-    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
-    #guardamos 
-    nA = [A[5], A[6], A[7]]
-    nB = [B[5], B[6], B[7]]
-    nC = [C[5], C[6], C[7]]
-    
-    normal = [u * nA[0] + v*nB[0] + w*nC[0],
-              u * nA[1] + v*nB[1] + w*nC[1],
-              u * nA[2] + v*nB[2] + w*nC[2]]
-    
-        
-    
-    r = 1
-    g = 1
-    b = 1
-    
-    
-    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
-            u * vtA[1] + v *vtB[1] + w * vtC[1]]
-    
-
-    if len(textureList) > 0:
-        texColor = textureList[0].getColor(vtP[0], vtP[1])
-        
-        r *= texColor[0]
-        g *= texColor[1]
-        b *= texColor[2]
-       
-    #error? convertir dirLight to array 
-    x = [-1 * elem for elem in toArray(dirLight)]
-    intensity = dotProd(normal, x)
-    intensity = max(0, intensity)
-    r *= intensity
-    g *= intensity
-    b *= intensity
-    
-    #Glow
-    yellowGlow = [0.7, 0.4, 0.4]
-    
-    camForward = [camMatrix[0][2],  
-              camMatrix[1][2],  
-              camMatrix[2][2]]  
-    
-    glowIntesity = 1- dotProd(normal, camForward)
-    glowIntesity = min(1, max(0, glowIntesity))
-    r += yellowGlow[0] * glowIntesity
-    g += yellowGlow[1] * glowIntesity
-    b += yellowGlow[2] * glowIntesity
-    
-    
-    return [min(1, r),
-            min(1, g),
-            min(1, b)]
 
 def gouradShader(**kwargs):
     #por pixel
@@ -537,3 +473,265 @@ def majoraskShader(**kwargs):
     b = max(0, min(b, 1))
     
     return [r, g, b]
+def lunaShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    textureList = kwargs["textureList"]
+    dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
+    camMatrix = kwargs["camMatrix"]
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
+    #guardamos 
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
+    normal = [u * nA[0] + v*nB[0] + w*nC[0],
+              u * nA[1] + v*nB[1] + w*nC[1],
+              u * nA[2] + v*nB[2] + w*nC[2]]
+    
+        
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if len(textureList) > 0:
+        texColor = textureList[0].getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+       
+    #error? convertir dirLight to array 
+    x = [-1 * elem for elem in toArray(dirLight)]
+    intensity = dotProd(normal, x)
+    intensity = max(0, intensity)
+    r *= intensity
+    g *= intensity
+    b *= intensity
+    
+    #Glow
+    yellowGlow = [0.7, 0.4, 0.4]
+    
+    camForward = [camMatrix[0][2],  
+              camMatrix[1][2],  
+              camMatrix[2][2]]  
+    
+    glowIntesity = 1- dotProd(normal, camForward)
+    glowIntesity = min(1, max(0, glowIntesity))
+    r += yellowGlow[0] * glowIntesity
+    g += yellowGlow[1] * glowIntesity
+    b += yellowGlow[2] * glowIntesity
+    
+    
+    return [min(1, r),
+            min(1, g),
+            min(1, b)]
+
+def buffaloShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
+    dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
+    camMatrix = kwargs["camMatrix"]
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
+    #guardamos 
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
+    normal = [u * nA[0] + v*nB[0] + w*nC[0],
+              u * nA[1] + v*nB[1] + w*nC[1],
+              u * nA[2] + v*nB[2] + w*nC[2]]
+    
+        
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+       
+    #error? convertir dirLight to array 
+    x = [-1 * elem for elem in toArray(dirLight)]
+    intensity = dotProd(normal, x)
+    intensity = max(0, intensity)
+    r *= intensity
+    g *= intensity
+    b *= intensity
+    
+    #Glow
+    yellowGlow = [0.2, 0.4, 0.9]
+    
+    camForward = [camMatrix[0][2],  
+              camMatrix[1][2],  
+              camMatrix[2][2]]  
+    
+    glowIntesity = 1- dotProd(normal, camForward)
+    glowIntesity = min(1, max(0, glowIntesity))
+    r += yellowGlow[0] * glowIntesity
+    g += yellowGlow[1] * glowIntesity
+    b += yellowGlow[2] * glowIntesity
+    
+    
+    return [min(1, r),
+            min(1, g),
+            min(1, b)]
+
+def astShader(**kwargs):
+    #por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    textureList = kwargs["textureList"]
+    dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
+    camMatrix = kwargs["camMatrix"]
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    # sabiendo que los valores de las noramles estan en la 6,7,8 pos
+    #guardamos 
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
+    normal = [u * nA[0] + v*nB[0] + w*nC[0],
+              u * nA[1] + v*nB[1] + w*nC[1],
+              u * nA[2] + v*nB[2] + w*nC[2]]
+    
+        
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    
+    vtP = [ u * vtA[0] + v *vtB[0] + w * vtC[0],
+            u * vtA[1] + v *vtB[1] + w * vtC[1]]
+    
+
+    if len(textureList) > 0:
+        texColor = textureList[0].getColor(vtP[0], vtP[1])
+        
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+       
+    #error? convertir dirLight to array 
+    x = [-1 * elem for elem in toArray(dirLight)]
+    intensity = dotProd(normal, x)
+    intensity = max(0, intensity)
+    r *= intensity
+    g *= intensity
+    b *= intensity
+    
+    #Glow
+    yellowGlow = [0.5, 0.1, 0.0]
+    
+    camForward = [camMatrix[0][2],  
+              camMatrix[1][2],  
+              camMatrix[2][2]]  
+    
+    glowIntesity = 1- dotProd(normal, camForward)
+    glowIntesity = min(1, max(0, glowIntesity))
+    
+    r += yellowGlow[0] * glowIntesity 
+    g += yellowGlow[1] * glowIntesity
+    b += yellowGlow[2] * glowIntesity
+    
+    
+    return [min(1, r),
+            min(1, g),
+            min(1, b)]
+
+def alienShader(**kwargs):
+    # por pixel
+    A, B, C = kwargs["verts"]
+    u, v, w = kwargs["bCoords"]
+    texture = kwargs["texture"]
+    dirLight = kwargs["dirLight"]
+    modelMatrix = kwargs["modelMatrix"]
+    camMatrix = kwargs["camMatrix"]
+    vtA = [A[3], A[4]]
+    vtB = [B[3], B[4]]
+    vtC = [C[3], C[4]]
+    
+    # Valores de las normales
+    nA = [A[5], A[6], A[7]]
+    nB = [B[5], B[6], B[7]]
+    nC = [C[5], C[6], C[7]]
+    
+    normal = [
+        u * nA[0] + v * nB[0] + w * nC[0],
+        u * nA[1] + v * nB[1] + w * nC[1],
+        u * nA[2] + v * nB[2] + w * nC[2]
+    ]
+    
+    r = 1
+    g = 1
+    b = 1
+    
+    vtP = [
+        u * vtA[0] + v * vtB[0] + w * vtC[0],
+        u * vtA[1] + v * vtB[1] + w * vtC[1]
+    ]
+    
+    if texture:
+        texColor = texture.getColor(vtP[0], vtP[1])
+        r *= texColor[0]
+        g *= texColor[1]
+        b *= texColor[2]
+       
+    # Convertir dirLight a array y calcular intensidad
+    x = [-1 * elem for elem in toArray(dirLight)]
+    intensity = dotProd(normal, x)
+    intensity = max(0, intensity)
+    r *= intensity
+    g *= intensity
+    b *= intensity
+    
+    # Glow arcoiris
+    camForward = [camMatrix[0][2], camMatrix[1][2], camMatrix[2][2]]  
+    glowIntensity = 1 - dotProd(normal, camForward)
+    glowIntensity = min(1, max(0, glowIntensity))
+
+    # Función para generar los colores del arcoiris
+    glowColor = [
+        0.5 * (1 + math.sin(vtP[0] * 10 + 0)),  # Rojo
+        0.5 * (1 + math.sin(vtP[0] * 10 + 2)),  # Verde
+        0.5 * (1 + math.sin(vtP[0] * 10 + 4))   # Azul
+    ]
+    
+    r += glowColor[0] * glowIntensity
+    g += glowColor[1] * glowIntensity
+    b += glowColor[2] * glowIntensity
+    
+    return [min(1, r), min(1, g), min(1, b)]

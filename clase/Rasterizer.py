@@ -24,7 +24,7 @@ b = 0.75
 modelo1 = Model("clase/objects/ast/ast1.obj")
 
 modelo1.vertexShader = vertexShader
-modelo1.fragmentShader = glowShader
+modelo1.fragmentShader = astShader
 modelo1.LoadTextures("clase/textures/astro.bmp")
 modelo1.translate[0] = 1.8
 modelo1.translate[1] = -1.2 
@@ -69,18 +69,19 @@ modelo4 = Model("clase/objects/Moon.obj")
 modelo4.LoadTextures("clase/textures/moon/Bump.bmp")
 modelo4.LoadTextures("clase/textures/moon/Diffuse.bmp")
 modelo4.vertexShader = vertexShader
-modelo4.fragmentShader = glowShader
+modelo4.fragmentShader = gouradShader
 modelo4.translate[0] = -2
 modelo4.translate[1] = -2
 modelo4.translate[2] = -6
 modelo4.scale[0] = 1
 modelo4.scale[1] = 1
 modelo4.scale[2] = 1
+
 #Buffalo
 modelo5 = Model("clase/objects/buffalo.obj")
-modelo5.LoadTextures("clase/textures/buffalo/Diffuse.bmp")
+modelo5.LoadTexture("clase/textures/buffalo/Diffuse.bmp")
 modelo5.vertexShader = vertexShader
-modelo5.fragmentShader = glowShader
+modelo5.fragmentShader = buffaloShader
 modelo5.translate[0] = 9
 modelo5.translate[1] = 4.5
 modelo5.translate[2] = -25
@@ -91,11 +92,24 @@ modelo5.rotate[0] = 20
 modelo5.rotate[1] = 300
 modelo5.rotate[2] = 126
 
+#alien?
+modelo6 = Model("clase/objects/alien.obj")
+modelo6.LoadTexture("clase/textures/alien/texture.bmp")
+modelo6.vertexShader = vertexShader
+modelo6.fragmentShader = alienShader
+modelo6.translate[0] = -1
+modelo6.translate[1] = -0.2
+modelo6.translate[2] = -3
+modelo6.scale[0] = 1
+modelo6.scale[1] = 1
+modelo6.scale[2] = 1
+
 rend.models.append(modelo1)
 rend.models.append(modelo2)
 rend.models.append(modelo3)
 rend.models.append(modelo4)
 rend.models.append(modelo5)
+rend.models.append(modelo6)
 
 isRunning = True
 while isRunning:
@@ -151,7 +165,7 @@ while isRunning:
     rend.glRender()
     pygame.display.flip()	  
     clock.tick(60)
-rend.glGFB("edgesgreenShader.bmp")
+rend.glGFB("Proyecto1.bmp")
 
 pygame.quit()  
   
